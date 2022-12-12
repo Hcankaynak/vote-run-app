@@ -1,0 +1,30 @@
+.register-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 50px;
+
+  .input-element {
+    margin-bottom: 20px;
+  }
+  .name {
+    width: 450px;
+  }
+
+  .email {
+    width: 450px;
+  }
+
+  .pass {
+    width: 450px;
+  }
+
+  .register-button-shell {
+    display: flex;
+    justify-content: center;
+
+    .register-button {
+      width: 200px;
+    }
+  }
+}

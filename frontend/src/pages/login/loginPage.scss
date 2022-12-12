@@ -1,0 +1,25 @@
+.login-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .email {
+    margin-top: 50px;
+    width: 450px;
+  }
+
+  .pass {
+    margin-top: 20px;
+    width: 450px;
+  }
+
+  .login-button-shell {
+    display: flex;
+    justify-content: center;
+
+    .login-button {
+      margin-top: 20px;
+      width: 200px;
+    }
+  }
+}
