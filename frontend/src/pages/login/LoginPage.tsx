@@ -2,6 +2,9 @@ import Form from "react-bootstrap/Form";
 import React from "react";
 import "./loginPage.scss";
 import {Button} from "react-bootstrap";
+import {getAuth, GoogleAuthProvider, signInWithPopup} from "firebase/auth";
+import {useNavigate} from "react-router-dom";
+
 
 interface ILoginData {
     email: string;
@@ -9,10 +12,56 @@ interface ILoginData {
 }
 
 const LoginPage = () => {
+    const [isLoggedIn, setIsLoggedIn] = React.useState(window.localStorage.getItem('auth'));
+    const [token, setToken] = React.useState<string>(null);
 
     const [loginData, setLoginData] = React.useState({} as ILoginData);
+    const auth = getAuth();
+    const provider = new GoogleAuthProvider();
+    const navigate = useNavigate();
 
+    React.useEffect(() => {
+        // TODO: how to revoke token ?
+        auth.onAuthStateChanged((userCred) => {
+            if (userCred) {
+                window.localStorage.setItem('auth', userCred.email);
+                userCred.getIdToken().then((token) => {
+                    console.log(token);
+                    window.localStorage.setItem('auth', token);
+                    setIsLoggedIn(token)
+                })
+                navigate("/");
+            }
+        })
+    }, [])
 
+    // TODO: use redux here
+    const loginWithGoogle = () => {
+        signInWithPopup(auth, provider)
+            .then((result) => {
+                // This gives you a Google Access Token. You can use it to access the Google API.
+                const credential = GoogleAuthProvider.credentialFromResult(result);
+                const token = credential.accessToken;
+                // The signed-in user info.
+                const user = result.user;
+                setIsLoggedIn(user.email)
+                user.getIdToken().then(value => (token) => {
+                    window.localStorage.setItem('auth', token);
+                })
+
+                console.log(user);
+                // ...
+            }).catch((error) => {
+            // Handle Errors here.
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            // The email of the user's account used.
+            const email = error.customData.email;
+            // The AuthCredential type that was used.
+            const credential = GoogleAuthProvider.credentialFromError(error);
+            // ...
+        });
+    }
     return (
         <div className="login-page">
             <Form>
@@ -33,6 +82,9 @@ const LoginPage = () => {
                     <Button className="login-button" type="button" onClick={() => console.log(loginData)}>Login</Button>
                 </div>
             </Form>
+            {isLoggedIn ? <h1>Welcome {isLoggedIn}</h1> :
+                <Button className="login-with-google-button" type="button" onClick={() => loginWithGoogle()}>Login with
+                    Google</Button>}
         </div>
     )
 }

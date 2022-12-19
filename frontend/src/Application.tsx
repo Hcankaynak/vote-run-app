@@ -4,7 +4,9 @@ import HomePage from "./pages/HomePage";
 import {LayoutComponent} from "./components/LayoutComponent";
 import LoginPage from "./pages/login/LoginPage";
 import RegisterPage from "./pages/register/RegisterPage";
-
+// TODO: how to store firebase config?
+import "./config/firebase-config"
+import React from "react";
 
 const Application = () => {
     return (
