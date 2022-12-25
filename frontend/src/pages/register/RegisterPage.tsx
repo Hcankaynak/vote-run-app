@@ -44,6 +44,7 @@ const RegisterPage = () => {
     };
 
     const handleRegister = () => {
+        // TODO: add validation.
         createUserWithEmailAndPassword(getAuth(), registerData.email, registerData.password).then((res) => {
             console.log(res.user);
         }).catch(err => console.log(err));

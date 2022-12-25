@@ -36,9 +36,14 @@ const LoginPage = () => {
     }, [])
 
     const loginWithEmailAndPassword = () => {
+        // TODO: add validation.
         signInWithEmailAndPassword(auth, loginData.email, loginData.password).then((userCredential) => {
             console.log(userCredential);
         }).catch(err => console.log(err));
+    }
+
+    const gotoRegisterPage = () => {
+        navigate("/register");
     }
 
     // TODO: use redux here
@@ -89,6 +94,12 @@ const LoginPage = () => {
                             onClick={() => loginWithEmailAndPassword()}>Login</Button>
                 </div>
             </Form>
+            <div className="register-button-shell input-element">
+                <Button
+                    className="register-button"
+                    type="submit"
+                    onClick={() => gotoRegisterPage()}>Register</Button>
+            </div>
             {isLoggedIn ? <h1>Welcome {isLoggedIn}</h1> :
                 <Button className="login-with-google-button" type="button" onClick={() => loginWithGoogle()}>Login with
                     Google</Button>}
