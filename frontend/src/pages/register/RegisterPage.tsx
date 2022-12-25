@@ -3,6 +3,8 @@ import React from "react";
 import "./registerPage.scss";
 import {Button} from "react-bootstrap";
 
+import {createUserWithEmailAndPassword, getAuth} from 'firebase/auth'
+
 interface IRegisterData {
     name: string;
     email: string;
@@ -31,6 +33,7 @@ const RegisterPage = () => {
 
     const handleSubmit = (event: any) => {
         const form = event.currentTarget;
+        event.preventDefault();
         console.log(registerData);
         if (form.checkValidity() === false) {
             event.preventDefault();
@@ -39,6 +42,12 @@ const RegisterPage = () => {
         setValidated(true);
 
     };
+
+    const handleRegister = () => {
+        createUserWithEmailAndPassword(getAuth(), registerData.email, registerData.password).then((res) => {
+            console.log(res.user);
+        }).catch(err => console.log(err));
+    }
 
     return (
         <div className="register-page">
@@ -76,7 +85,7 @@ const RegisterPage = () => {
                 </Form.Group>
 
                 <Form.Group className="email input-element" controlId="formGroupPassword">
-                    <Form.Label>Confirmation Email address</Form.Label>
+                    <Form.Label>Password</Form.Label>
                     <Form.Control
                         required
                         type="password"
@@ -84,7 +93,7 @@ const RegisterPage = () => {
                         onChange={(value) => setRegisterData({...registerData, password: value.target.value})}/>
                 </Form.Group>
                 <Form.Group className="pass input-element" controlId="formGroupConfirmationPassword">
-                    <Form.Label>Password</Form.Label>
+                    <Form.Label>Confirmation Password</Form.Label>
                     <Form.Control
                         required
                         type="password"
@@ -101,7 +110,7 @@ const RegisterPage = () => {
                     <Button
                         className="register-button"
                         type="submit"
-                        onClick={() => console.log(registerData)}>Register</Button>
+                        onClick={() => handleRegister()}>Register</Button>
                 </div>
             </Form>
         </div>

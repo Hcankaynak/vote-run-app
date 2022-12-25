@@ -2,7 +2,7 @@ import Form from "react-bootstrap/Form";
 import React from "react";
 import "./loginPage.scss";
 import {Button} from "react-bootstrap";
-import {getAuth, GoogleAuthProvider, signInWithPopup} from "firebase/auth";
+import {getAuth, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup} from "firebase/auth";
 import {useNavigate} from "react-router-dom";
 
 
@@ -34,6 +34,12 @@ const LoginPage = () => {
             }
         })
     }, [])
+
+    const loginWithEmailAndPassword = () => {
+        signInWithEmailAndPassword(auth, loginData.email, loginData.password).then((userCredential) => {
+            console.log(userCredential);
+        }).catch(err => console.log(err));
+    }
 
     // TODO: use redux here
     const loginWithGoogle = () => {
@@ -79,7 +85,8 @@ const LoginPage = () => {
                     />
                 </Form.Group>
                 <div className="login-button-shell">
-                    <Button className="login-button" type="button" onClick={() => console.log(loginData)}>Login</Button>
+                    <Button className="login-button" type="button"
+                            onClick={() => loginWithEmailAndPassword()}>Login</Button>
                 </div>
             </Form>
             {isLoggedIn ? <h1>Welcome {isLoggedIn}</h1> :
