@@ -7,6 +7,7 @@ import RegisterPage from "./pages/register/RegisterPage";
 // TODO: how to store firebase config?
 import "./config/firebase-config"
 import React from "react";
+import {QRCodeGenerator} from "./components/QRCodeGenerator/QRCodeGenerator";
 
 const Application = () => {
     return (
@@ -24,7 +25,7 @@ const Application = () => {
                 </Route>
                 <Route path="login" element={<LoginPage/>}/>
                 <Route path="register" element={<RegisterPage/>}/>
-
+                <Route path="qrcode" element={<QRCodeGenerator/>}/>
                 <Route path="layout" element={<LayoutComponent/>}>
                     <Route index element={<AboutPage/>}/>
                     <Route path=":number" element={<AboutPage/>}/>
