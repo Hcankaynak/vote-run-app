@@ -8,6 +8,7 @@ import RegisterPage from "./pages/register/RegisterPage";
 import "./config/firebase-config"
 import React from "react";
 import {QRCodeGenerator} from "./components/QRCodeGenerator/QRCodeGenerator";
+import {PresentationCreator} from "./pages/presentation/PresentationCreator";
 
 const Application = () => {
     return (
@@ -26,6 +27,7 @@ const Application = () => {
                 <Route path="login" element={<LoginPage/>}/>
                 <Route path="register" element={<RegisterPage/>}/>
                 <Route path="qrcode" element={<QRCodeGenerator/>}/>
+                <Route path="presentation" element={<PresentationCreator/>}/>
                 <Route path="layout" element={<LayoutComponent/>}>
                     <Route index element={<AboutPage/>}/>
                     <Route path=":number" element={<AboutPage/>}/>

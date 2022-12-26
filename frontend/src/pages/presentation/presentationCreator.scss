@@ -1,0 +1,30 @@
+.presentation-creator {
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
+
+  .topic-element {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+
+    .topic {
+      flex: 9;
+      padding-right: 20px;
+    }
+    .btn {
+      flex: 1;
+    }
+
+  }
+  .btn-primary {
+    margin-bottom: 20px;
+  }
+  .btn-continue-shell {
+    display: flex;
+    justify-content: flex-end;
+    .btn-success {
+      width: 100px;
+    }
+  }
+}
