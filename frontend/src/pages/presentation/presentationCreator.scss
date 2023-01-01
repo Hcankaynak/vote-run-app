@@ -5,26 +5,43 @@
 
   .topic-element {
     display: flex;
-    justify-content: space-between;
     margin-bottom: 20px;
+    height: 100px;
+    align-items: center;
+    box-shadow: 0 0 40px -10px rgba(0, 0, 0, .4);
 
     .topic {
-      flex: 9;
-      padding-right: 20px;
-    }
-    .btn {
+      display: flex;
       flex: 1;
+      height: 40px;
     }
 
+    .delete-item-button {
+      display: none;
+    }
   }
+
+  .topic-element:hover {
+
+    .delete-item-button {
+      display: flex;
+    }
+
+    .topic {
+      padding-right: 20px;
+    }
+  }
+
   .btn-primary {
     margin-bottom: 20px;
   }
+
   .btn-continue-shell {
     display: flex;
     justify-content: flex-end;
+
     .btn-success {
-      width: 100px;
+      width: 15%;
     }
   }
 }

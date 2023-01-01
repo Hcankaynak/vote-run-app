@@ -1,5 +1,6 @@
 import {initializeApp} from "firebase/app";
 import {getAnalytics} from "firebase/analytics";
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDPLQJPjoe_dcOEngCHEfEj3XJxueIszTI",
@@ -12,6 +13,8 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+export const app = initializeApp(firebaseConfig);
+export const analytics = getAnalytics(app);
+export const db = getFirestore(app);
+
 console.log(analytics.app.name)

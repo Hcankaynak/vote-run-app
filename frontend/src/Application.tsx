@@ -9,8 +9,23 @@ import "./config/firebase-config"
 import React from "react";
 import {QRCodeGenerator} from "./components/QRCodeGenerator/QRCodeGenerator";
 import {PresentationCreator} from "./pages/presentation/PresentationCreator";
+import {getAuth} from "firebase/auth";
 
 const Application = () => {
+
+    const auth = getAuth();
+    const [userId, setUserId] = React.useState("");
+    React.useEffect(() => {
+        // TODO: how to revoke token ?
+        auth.onAuthStateChanged((userCred) => {
+            if (userCred) {
+                setUserId(userCred.uid);
+                userCred.getIdToken().then((token) => {
+                    console.log(token);
+                })
+            }
+        })
+    }, [])
     return (
         <BrowserRouter>
             <Routes>
@@ -27,7 +42,7 @@ const Application = () => {
                 <Route path="login" element={<LoginPage/>}/>
                 <Route path="register" element={<RegisterPage/>}/>
                 <Route path="qrcode" element={<QRCodeGenerator/>}/>
-                <Route path="presentation" element={<PresentationCreator/>}/>
+                <Route path="presentation" element={<PresentationCreator userId={userId}/>}/>
                 <Route path="layout" element={<LayoutComponent/>}>
                     <Route index element={<AboutPage/>}/>
                     <Route path=":number" element={<AboutPage/>}/>
