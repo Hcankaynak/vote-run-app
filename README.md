@@ -26,7 +26,7 @@ Todos:
 <br>
 [ ] error handling for backend, shutting down.
 <br>
-[ ] presentation add dnd.
+[x] presentation add dnd.
 <br>
 [ ] fix mobile, responsive design.
 <br>
