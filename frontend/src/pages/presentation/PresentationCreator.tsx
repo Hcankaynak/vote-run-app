@@ -4,6 +4,7 @@ import "./presentationCreator.scss"
 import Form from "react-bootstrap/Form";
 import {addDoc, collection, getDocs} from "firebase/firestore"
 import {db} from "../../config/firebase-config";
+import {DragDropContext, Droppable, Draggable} from "react-beautiful-dnd";
 
 export interface IPresentationCreator {
     userId: string;
@@ -18,7 +19,7 @@ interface IPresentationTopic {
  * TODO
  *
  * [x] Delete button visible on hover.
- * [ ] list items should be movable.
+ * [x] list items should be movable.
  * [ ] If adding successful navigate to qr page.
  * [ ] Design a beautiful list item.
  * [ ] Add order number
@@ -63,32 +64,60 @@ export const PresentationCreator = (props: IPresentationCreator) => {
         }).then(r => console.log(r)).catch(err => console.log(err))
     }
 
+    const handleOnDragEnd = (context) => {
+        if (!context.destination) return;
+
+        const items = Array.from(presentationTopics);
+        const [reorderedItem] = items.splice(context.source.index, 1);
+        items.splice(context.destination.index, 0, reorderedItem);
+
+        setPresentationTopics(items);
+    }
+
     const renderPresentationTopics = () => {
-        return presentationTopics.map((item) => {
-            return (
-                <div
-                    key={item.id}
-                    className="topic-element"
-                >
-                    <Form.Group className="topic input-element" controlId="formGroupName">
-                        <Form.Control
-                            required
-                            type="topic"
-                            placeholder="Enter Topic"
-                            onChange={(value) => setPresentationTopics((prevState => {
-                                const elementIndex = prevState.findIndex((el => el.id === item.id))
-                                const updatedList = [...prevState];
-                                updatedList[elementIndex].topic = value.target.value;
-                                return updatedList;
-                            }))}
-                        />
-                    </Form.Group>
-                    <div className="delete-item-button">
-                        <Button variant="danger" onClick={event => deleteTopic(item.id)}>Delete</Button>
-                    </div>
-                </div>
-            )
-        })
+        return <DragDropContext onDragEnd={handleOnDragEnd}>
+            <Droppable droppableId="presentationTopics">
+                {
+                    (provided) => (
+                        <div {...provided.droppableProps} ref={provided.innerRef}>
+                            {presentationTopics.map((item, index) => {
+                                return (
+                                    <Draggable key={item.id} draggableId={item.id + ""} index={index}>
+                                        {(provided) => (
+                                            <div
+                                                key={item.id}
+                                                className="topic-element"
+                                                ref={provided.innerRef}
+                                                {...provided.draggableProps}
+                                                {...provided.dragHandleProps}
+                                            >
+                                                <Form.Group className="topic input-element" controlId="formGroupName">
+                                                    <Form.Control
+                                                        required
+                                                        type="topic"
+                                                        placeholder="Enter Topic"
+                                                        onChange={(value) => setPresentationTopics((prevState => {
+                                                            const elementIndex = prevState.findIndex((el => el.id === item.id))
+                                                            const updatedList = [...prevState];
+                                                            updatedList[elementIndex].topic = value.target.value;
+                                                            return updatedList;
+                                                        }))}
+                                                    />
+                                                </Form.Group>
+                                                <div className="delete-item-button">
+                                                    <Button variant="danger" onClick={event => deleteTopic(item.id)}>Delete</Button>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </Draggable>
+                                )
+                            })}
+                            {provided.placeholder}
+                        </div>
+                    )
+                }
+            </Droppable>
+        </DragDropContext>
     }
     return (
         <div className="presentation-creator">
