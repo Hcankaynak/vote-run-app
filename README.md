@@ -22,7 +22,7 @@ Todos:
 <br>
 [ ] add presentation needs to save to db.
 <br>
-[ ] answer question page. (mostly used via mobile devices.)
+[x] answer question page. (mostly used via mobile devices.)
 <br>
 [ ] error handling for backend, shutting down.
 <br>
@@ -30,7 +30,9 @@ Todos:
 <br>
 [ ] add nav bar.
 <br>
-[ ] create answer pages.
+[x] create answer pages.
 <br>
 [ ] add navigation.
+<br>
+[ ] question page return icon color white
 <br>
