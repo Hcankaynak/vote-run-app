@@ -5,6 +5,7 @@ import Form from "react-bootstrap/Form";
 import {addDoc, collection, getDocs} from "firebase/firestore"
 import {db} from "../../config/firebase-config";
 import {DragDropContext, Droppable, Draggable} from "react-beautiful-dnd";
+import {BiMoveVertical} from "react-icons/bi";
 
 export interface IPresentationCreator {
     userId: string;
@@ -91,7 +92,10 @@ export const PresentationCreator = (props: IPresentationCreator) => {
                                                 {...provided.draggableProps}
                                                 {...provided.dragHandleProps}
                                             >
+                                                <BiMoveVertical size={20}/>
+                                                <div>{index + 1}</div>
                                                 <Form.Group className="topic input-element" controlId="formGroupName">
+                                                    <Form.Label>Topic</Form.Label>
                                                     <Form.Control
                                                         required
                                                         type="topic"
