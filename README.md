@@ -28,5 +28,7 @@ Todos:
 <br>
 [x] presentation add dnd.
 <br>
-[ ] fix mobile, responsive design.
+[x] fix mobile, responsive design login.
+<br>
+[ ] check responsive design for all pages.
 <br>

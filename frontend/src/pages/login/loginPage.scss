@@ -4,14 +4,31 @@
   align-items: center;
   justify-content: center;
 
+  .login-form-group {
+    display: flex;
+    flex-direction: column;
+    width: 25%;
+    align-items: center;
+  }
+
+  @media (max-width: 480px) {
+    .login-form-group {
+      width: 90%;
+    }
+  }
+
   .email {
+    display: flex;
+    flex-direction: column;
     margin-top: 50px;
-    width: 450px;
+    width: 90%;
   }
 
   .pass {
+    display: flex;
+    flex-direction: column;
     margin-top: 20px;
-    width: 450px;
+    width: 90%;
   }
 
   .login-button-shell {
@@ -19,16 +36,15 @@
     justify-content: center;
 
     .login-button {
-      margin-top: 20px;
-      width: 200px;
+      margin-top: 1em;
     }
   }
 
   .login-with-google-button {
-    margin-top: 20px;
+    margin-top: 1em;
   }
 
   .register-button-shell {
-    margin-top: 20px;
+    margin-top: 1em;
   }
 }

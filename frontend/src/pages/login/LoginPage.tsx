@@ -75,7 +75,7 @@ const LoginPage = () => {
     }
     return (
         <div className="login-page">
-            <Form>
+            <Form className="login-form-group">
                 <Form.Group className="email" controlId="formGroupEmail">
                     <Form.Label>Email address</Form.Label>
                     <Form.Control type="email" placeholder="Enter email"
