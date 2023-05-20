@@ -26,9 +26,11 @@ Todos:
 <br>
 [ ] error handling for backend, shutting down.
 <br>
-[x] presentation add dnd.
-<br>
-[x] fix mobile, responsive design login.
-<br>
 [ ] check responsive design for all pages.
+<br>
+[ ] add nav bar.
+<br>
+[ ] create answer pages.
+<br>
+[ ] add navigation.
 <br>
