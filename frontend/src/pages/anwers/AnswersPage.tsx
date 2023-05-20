@@ -58,7 +58,6 @@ const AnswersPage = () => {
             </div>
             <div className="answer-section">
                 <Form.Group className="answer input-element" controlId="formGroupName">
-                    <Form.Label>Answer</Form.Label>
                     <Form.Control
                         as="textarea"
                         rows={3}

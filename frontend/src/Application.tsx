@@ -11,6 +11,7 @@ import {QRCodeGenerator} from "./components/QRCodeGenerator/QRCodeGenerator";
 import {PresentationCreator} from "./pages/presentation/PresentationCreator";
 import {getAuth} from "firebase/auth";
 import AnswersPage from "./pages/anwers/AnswersPage";
+import QuestionsPage from "./pages/questions/QuestionsPage";
 
 const Application = () => {
 
@@ -44,6 +45,7 @@ const Application = () => {
                 <Route path="register" element={<RegisterPage/>}/>
                 <Route path="qrcode" element={<QRCodeGenerator/>}/>
                 <Route path="answers" element={<AnswersPage/>}/>
+                <Route path="questions" element={<QuestionsPage/>}/>
                 <Route path="presentation" element={<PresentationCreator userId={userId}/>}/>
                 <Route path="layout" element={<LayoutComponent/>}>
                     <Route index element={<AboutPage/>}/>

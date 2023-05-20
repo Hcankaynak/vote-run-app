@@ -1,0 +1,39 @@
+.questions-page {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding-top: 2%;
+
+  .questions-page-header {
+    display: flex;
+    height: 15%;
+    padding-left: 5%;
+
+    .return-button {
+      display: flex;
+      align-items: center;
+    }
+
+    .question-header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: larger;
+      font-weight: bold;
+      width: 100%;
+      padding-left: 2%;
+      padding-right: 2%;
+    }
+  }
+
+
+  .questions-page-content {
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-gap: 3%;
+    padding: 5%;
+
+    .answer-card {
+    }
+  }
+}
