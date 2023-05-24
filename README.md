@@ -22,15 +22,13 @@ Todos:
 <br>
 [ ] add presentation needs to save to db.
 <br>
-[x] answer question page. (mostly used via mobile devices.)
-<br>
 [ ] error handling for backend, shutting down.
 <br>
 [ ] check responsive design for all pages.
 <br>
 [ ] add nav bar.
 <br>
-[x] create answer pages.
+[ ] write a shell component that render header and footer.
 <br>
 [ ] add navigation.
 <br>

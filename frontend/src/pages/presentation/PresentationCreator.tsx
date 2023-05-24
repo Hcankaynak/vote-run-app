@@ -2,10 +2,12 @@ import * as React from 'react';
 import {Button} from "react-bootstrap";
 import "./presentationCreator.scss"
 import Form from "react-bootstrap/Form";
-import {addDoc, collection, getDocs} from "firebase/firestore"
+import {addDoc, collection, doc, getDoc, setDoc} from "firebase/firestore"
 import {db} from "../../config/firebase-config";
-import {DragDropContext, Droppable, Draggable} from "react-beautiful-dnd";
+import {DragDropContext, Draggable, Droppable} from "react-beautiful-dnd";
 import {BiMoveVertical} from "react-icons/bi";
+import {COLLECTION_NAME} from "./PresentationCreatorService";
+import {useNavigate} from "react-router-dom";
 
 export interface IPresentationCreator {
     userId: string;
@@ -23,7 +25,7 @@ interface IPresentationTopic {
  * [x] list items should be movable.
  * [ ] If adding successful navigate to qr page.
  * [ ] Design a beautiful list item.
- * [ ] Add order number
+ * [X] Add order number
  */
 
 
@@ -33,15 +35,14 @@ interface IPresentationTopic {
  * @constructor
  */
 export const PresentationCreator = (props: IPresentationCreator) => {
-    const COLLECTION_NAME = "Presentations";
     const [presentationTopics, setPresentationTopics] = React.useState<IPresentationTopic[]>([]);
-    const colRef = collection(db, COLLECTION_NAME)
+    const navigate = useNavigate();
 
     React.useEffect(() => {
-        const docsSnap = getDocs(colRef);
-        docsSnap.then((value) => {
-            value.forEach(result => console.log(result.data()))
-        }).catch(err => console.log(err))
+        // const docsSnap = getDocs(colRef);
+        // docsSnap.then((value) => {
+        //     value.forEach(result => console.log(result.data()))
+        // }).catch(err => console.log(err))
     }, [])
 
     const deleteTopic = (id: number) => {
@@ -57,12 +58,43 @@ export const PresentationCreator = (props: IPresentationCreator) => {
         })
     }
 
-    const createPresentation = () => {
+    const createPresentation = async () => {
+        const docRef = doc(db, COLLECTION_NAME, props.userId);
+
         // await setDoc(doc(db, ""))
-        addDoc(colRef, {
-            list: presentationTopics,
-            user: props.userId
-        }).then(r => console.log(r)).catch(err => console.log(err))
+        const docSnap = await getDoc(docRef);
+        // db.collection(COLLECTION_NAME).doc(props.userId)
+        // addDoc(colRef, {
+        //     list: presentationTopics,
+        //     user: props.userId
+        // }).then(r => console.log(r)).catch(err => console.log(err))
+        if (docSnap.exists()) {
+            const colRef = collection(db, COLLECTION_NAME, props.userId, COLLECTION_NAME);
+
+
+            addDoc(colRef, {
+                list: presentationTopics,
+                user: props.userId
+            }).then(value => {
+                navigate("/qrcode", {state: "blalasd"})
+            })
+            console.log("docSnap")
+
+            console.log(docSnap)
+        } else {
+
+            await setDoc(doc(db, COLLECTION_NAME, props.userId),{
+
+            }).then(r => console.log(r)).catch(err => console.log(err))
+
+            const colRef = collection(db, COLLECTION_NAME, props.userId, COLLECTION_NAME);
+
+            await addDoc(colRef, {
+                list: presentationTopics,
+                user: props.userId
+            })
+
+        }
     }
 
     const handleOnDragEnd = (context) => {
@@ -109,7 +141,8 @@ export const PresentationCreator = (props: IPresentationCreator) => {
                                                     />
                                                 </Form.Group>
                                                 <div className="delete-item-button">
-                                                    <Button variant="danger" onClick={event => deleteTopic(item.id)}>Delete</Button>
+                                                    <Button variant="danger"
+                                                            onClick={event => deleteTopic(item.id)}>Delete</Button>
                                                 </div>
                                             </div>
                                         )}
