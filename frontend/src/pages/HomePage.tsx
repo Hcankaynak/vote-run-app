@@ -4,7 +4,6 @@ import "./homepage.scss";
 import {Button} from "react-bootstrap";
 import {useNavigate} from "react-router-dom";
 import {getAuth, signOut} from "firebase/auth";
-import axios from "axios";
 
 
 const HomePage = () => {
@@ -22,23 +21,26 @@ const HomePage = () => {
 
     }
 
-    React.useEffect(() => {
-        fetchData();
-    }, [])
-
-    const fetchData = async () => {
-        const res = await axios.get("http://localhost:3001/api", {
-            headers: {
-                Authorization: 'Bearer ' + token
-            }
-        });
-        console.log(res.data);
-    }
-
     return (
         <div className="home-page">
-            <h1>HomePage</h1>
-            <Button className="logout-button" type="button" onClick={() => logout()}>Logout</Button>
+            <>
+                <h1>HomePage</h1>
+                <Button className="logout-button" type="button" onClick={() => logout()}>Logout</Button>
+            </>
+            <div className="home-page-content">
+                <Button onClick={() => navigate("presentation")}>
+                    Presentation
+                </Button>
+                <Button onClick={() => navigate("qrcode")}>
+                    qrcode
+                </Button>
+                <Button onClick={() => navigate("questions")}>
+                    questions
+                </Button>
+                <Button onClick={() => navigate("answers")}>
+                    answers
+                </Button>
+            </div>
         </div>
     );
 };
