@@ -2,6 +2,10 @@ import * as React from 'react';
 import "./anwersPage.scss"
 import {Button} from "react-bootstrap";
 import Form from "react-bootstrap/Form";
+import {useNavigate, useParams} from "react-router-dom";
+import {ANSWERS_COLLECTION_NAME, PRESENTATIONS_COLLECTION_NAME} from "../presentation/PresentationCreatorService";
+import {addDoc, collection, doc, getDoc} from "firebase/firestore";
+import {db} from "../../config/firebase-config";
 
 
 const questions = [{
@@ -22,8 +26,43 @@ const questions = [{
 
 const AnswersPage = () => {
     const [selectedQuestion, setSelectedQuestion] = React.useState(0);
-    const [render, reRender] = React.useState(false);
+    const [questions, setQuestions] = React.useState([{questionName: "", questionId: 0}]);
     const [answer, setAnswer] = React.useState("");
+    const {presentationId} = useParams();
+    const navigate = useNavigate();
+
+    React.useEffect(() => {
+        console.log(presentationId);
+        const docRef = doc(db, PRESENTATIONS_COLLECTION_NAME, presentationId);
+        getDoc(docRef).then(r => {
+            const ques = r.get("questions").reduce((accum, item) => {
+                accum.push({questionName: item.topic, questionId: item.id});
+                return accum;
+            }, []);
+            console.log(ques);
+            setQuestions(ques);
+        });
+    }, [presentationId]);
+
+    const addAnswer = () => {
+        const questionId = questions[selectedQuestion].questionId + "";
+        const answerRef = collection(db, ANSWERS_COLLECTION_NAME, presentationId, questionId);
+        addDoc(answerRef, {
+            text: answer,
+            claps: 0
+        }).then(r => console.log(r));
+    }
+
+    const seeAllAnswers = () => {
+        console.log(presentationId);
+        console.log(questions[selectedQuestion].questionId);
+        navigate("/questionAnswers", {
+            state: {
+                presentationId: presentationId,
+                questionId: questions[selectedQuestion].questionId + ""
+            }
+        })
+    }
 
     return (
         <div className="answers-page">
@@ -63,7 +102,6 @@ const AnswersPage = () => {
                         rows={3}
                         type="name"
                         placeholder="Enter Answer"
-                        defaultValue={""}
                         value={answer}
                         onChange={(value) => setAnswer(value.target.value)}
                     />
@@ -72,15 +110,14 @@ const AnswersPage = () => {
             <div className="answer-buttons">
                 <div>
                     <Button className="see-all-button" type="button"
-                            onClick={() => {
-                            }}>See All Answers</Button>
+                            onClick={() => seeAllAnswers()}>See All Answers</Button>
                 </div>
                 <div>
                     <Button className="submit-button" type="button"
                             disabled={answer.length === 0}
                             onClick={() => {
-                                console.log(answer);
                                 setAnswer("");
+                                addAnswer()
                             }}>Submit</Button>
                 </div>
             </div>

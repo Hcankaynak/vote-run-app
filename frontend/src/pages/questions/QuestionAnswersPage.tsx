@@ -2,6 +2,7 @@ import * as React from 'react';
 import "./questionsPage.scss";
 import {GrReturn} from "react-icons/gr";
 import {Button, Card} from "react-bootstrap";
+import {useNavigate, useParams} from "react-router-dom";
 
 
 const answers = [
@@ -28,12 +29,22 @@ const answers = [
     }
 ]
 
-const QuestionsPage = () => {
+const QuestionAnswersPage = () => {
+    const {presentationId, questionId} = useParams();
+    const navigate = useNavigate();
+
+    React.useEffect(() => {
+        console.log(questionId)
+
+        console.log(presentationId)
+
+    }, [questionId, presentationId])
+
     return (
         <div className="questions-page">
             <div className="questions-page-header">
                 <div className="return-button">
-                    <Button>
+                    <Button onClick={() => navigate(-1)}>
                         <GrReturn size={23}/>
                     </Button>
                 </div>
@@ -57,4 +68,4 @@ const QuestionsPage = () => {
     )
 }
 
-export default QuestionsPage;
+export default QuestionAnswersPage;

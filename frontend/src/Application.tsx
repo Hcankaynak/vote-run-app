@@ -7,11 +7,11 @@ import RegisterPage from "./pages/register/RegisterPage";
 // TODO: how to store firebase config?
 import "./config/firebase-config"
 import React from "react";
-import {QRCodeGenerator} from "./components/QRCodeGenerator/QRCodeGenerator";
 import {PresentationCreator} from "./pages/presentation/PresentationCreator";
 import {getAuth} from "firebase/auth";
 import AnswersPage from "./pages/anwers/AnswersPage";
-import QuestionsPage from "./pages/questions/QuestionsPage";
+import QuestionAnswersPage from "./pages/questions/QuestionAnswersPage";
+import {QRCodePage} from "./pages/qrCode/QRCodePage";
 
 const Application = () => {
 
@@ -43,9 +43,12 @@ const Application = () => {
                 </Route>
                 <Route path="login" element={<LoginPage/>}/>
                 <Route path="register" element={<RegisterPage/>}/>
-                <Route path="qrcode" element={<QRCodeGenerator/>}/>
-                <Route path="answers" element={<AnswersPage/>}/>
-                <Route path="questions" element={<QuestionsPage/>}/>
+                <Route path="qrcode" element={<QRCodePage/>}/>
+                <Route path="answers">
+                    <Route index element={<AnswersPage/>}/>
+                    <Route path=":presentationId" element={<AnswersPage/>}/>
+                </Route>
+                <Route path="questionAnswers" element={<QuestionAnswersPage/>}/>
                 <Route path="presentation" element={<PresentationCreator userId={userId}/>}/>
                 <Route path="layout" element={<LayoutComponent/>}>
                     <Route index element={<AboutPage/>}/>
