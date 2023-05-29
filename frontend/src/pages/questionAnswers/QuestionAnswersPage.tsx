@@ -3,9 +3,9 @@ import "./questionsPage.scss";
 import {GrReturn} from "react-icons/gr";
 import {Button, Card} from "react-bootstrap";
 import {useLocation, useNavigate} from "react-router-dom";
-import {collection, doc, getDoc, getDocs} from "firebase/firestore";
+import {collection, getDocs, onSnapshot} from "firebase/firestore";
 import {db} from "../../config/firebase-config";
-import {ANSWERS_COLLECTION_NAME, PRESENTATIONS_COLLECTION_NAME} from "../presentation/PresentationCreatorService";
+import {ANSWERS_COLLECTION_NAME} from "../presentation/PresentationCreatorService";
 
 
 const QuestionAnswersPage = () => {
@@ -21,21 +21,35 @@ const QuestionAnswersPage = () => {
 
     }, [questionId, presentationId])
 
+
+
+    React.useEffect(() => {
+        const unsub = onSnapshot(collection(db, ANSWERS_COLLECTION_NAME, presentationId, questionId), (doc) => {
+            console.log("Current data: ", doc.docs);
+            convertDBObjectToReactObject(doc.docs);
+        });
+        return () => unsub();
+    }, []);
+
     React.useEffect(() => {
         console.log(presentationId);
-        // const answersRef = doc(db, ANSWERS_COLLECTION_NAME, presentationId, questionId);
-        const answersRef =collection(db, ANSWERS_COLLECTION_NAME, presentationId, questionId);
+        const answersRef = collection(db, ANSWERS_COLLECTION_NAME, presentationId, questionId);
 
-        getDocs(answersRef).then(r => {
-
-            const ans = r.docs.reduce((accum, item) => {
-                accum.push({text: item.get("text"), clap: item.get("claps")});
-                return accum;
-            }, []);
-            console.log(r.docs);
-            setTopicAllAnswer(ans);
+        getDocs(answersRef).then((r) => {
+            // convertDBObjectToReactObject(r);
+            console.log(r);
         });
     }, [presentationId]);
+
+    const convertDBObjectToReactObject = (docs) => {
+        console.log(docs.data);
+        const ans = docs.reduce((accum, item) => {
+            accum.push({text: item.get("text"), clap: item.get("claps")});
+            return accum;
+        }, []);
+        console.log(docs);
+        setTopicAllAnswer(ans);
+    }
 
     return (
         <div className="questions-page">
