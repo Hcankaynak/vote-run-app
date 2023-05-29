@@ -6,15 +6,16 @@ import React from "react";
 export const QRCodePage = () => {
     const {state} = useLocation();
     const qrCodeData = React.useMemo(() => {
-        const hostName = window.location.hostname;
+        const hostName = window.location.origin;
         const presentationId = state?.presentationId ?? "emptyData";
-        console.log("http://192.168.0.19:3000" + "/" + "answers" + "/" + presentationId);
-        return "http://192.168.0.19:3000" + "/" + "answers" + "/" + presentationId;
+        console.log(hostName + "/" + "answers" + "/" + presentationId);
+        return hostName + "/" + "answers" + "/" + presentationId;
     }, [state]);
 
     return (
         <div className="qr-code-page-content">
             <QRCodeGenerator qrCodeData={qrCodeData}/>
+            <a href={qrCodeData}>Go To Topics</a>
         </div>
     )
 }

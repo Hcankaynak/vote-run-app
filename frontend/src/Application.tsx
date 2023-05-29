@@ -10,7 +10,7 @@ import React from "react";
 import {PresentationCreator} from "./pages/presentation/PresentationCreator";
 import {getAuth} from "firebase/auth";
 import AnswersPage from "./pages/anwers/AnswersPage";
-import QuestionAnswersPage from "./pages/questions/QuestionAnswersPage";
+import QuestionAnswersPage from "./pages/questionAnswers/QuestionAnswersPage";
 import {QRCodePage} from "./pages/qrCode/QRCodePage";
 
 const Application = () => {

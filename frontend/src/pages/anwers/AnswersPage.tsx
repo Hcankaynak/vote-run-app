@@ -59,7 +59,8 @@ const AnswersPage = () => {
         navigate("/questionAnswers", {
             state: {
                 presentationId: presentationId,
-                questionId: questions[selectedQuestion].questionId + ""
+                questionId: questions[selectedQuestion].questionId + "",
+                question: questions[selectedQuestion].questionName
             }
         })
     }

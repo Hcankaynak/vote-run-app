@@ -85,6 +85,10 @@ export const PresentationCreator = (props: IPresentationCreator) => {
         }).catch(reason => console.log(reason))
     }
 
+    const checkValidation = () => {
+        return presentationTopics.some((item) => item.topic === "") || presentationTopics.length == 0;
+    }
+
     const handleOnDragEnd = (context) => {
         if (!context.destination) return;
 
@@ -151,7 +155,7 @@ export const PresentationCreator = (props: IPresentationCreator) => {
 
             <Button variant="primary" onClick={event => addNewTopic()}>Add new topic</Button>
             <div className="btn-continue-shell">
-                <Button variant="success" onClick={event => createPresentation()}>Create Presentation</Button>
+                <Button variant="success" disabled={checkValidation()} onClick={event => createPresentation()}>Create Presentation</Button>
             </div>
 
         </div>
