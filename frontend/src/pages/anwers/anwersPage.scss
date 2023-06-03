@@ -10,18 +10,28 @@
     justify-content: space-around;
     align-items: center;
 
-    .prev {
+    .answers-page-header-content {
+      width: 90%;
       display: flex;
-    }
 
-    .questions {
-      display: flex;
-      font-weight: bold;
-      font-size: larger;
-    }
+      .prev {
+        display: flex;
+        flex: 1;
+      }
 
-    .next {
-      display: flex;
+      .questions {
+        display: flex;
+        font-weight: bold;
+        font-size: larger;
+        align-items: center;
+        justify-items: center;
+      }
+
+      .next {
+        flex: 1;
+        display: flex;
+        flex-direction: row-reverse;
+      }
     }
   }
 
