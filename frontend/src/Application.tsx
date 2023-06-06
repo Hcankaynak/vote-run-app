@@ -12,6 +12,7 @@ import {getAuth} from "firebase/auth";
 import AnswersPage from "./pages/anwers/AnswersPage";
 import QuestionAnswersPage from "./pages/questionAnswers/QuestionAnswersPage";
 import {QRCodePage} from "./pages/qrCode/QRCodePage";
+import {UserNavbar} from "./components/UserNavbar/UserNavbar";
 
 const Application = () => {
 
@@ -36,7 +37,7 @@ const Application = () => {
                     // TODO: LayoutComponent should be applied all pages.
                     // TODO: add error path
                 }
-                <Route path="/" element={<HomePage/>}/>
+                <Route path="/" element={<UserNavbar><HomePage userId={userId}/></UserNavbar>}/>
                 <Route path="about">
                     <Route index element={<AboutPage/>}/>
                     <Route path=":number" element={<AboutPage/>}/>
@@ -49,7 +50,9 @@ const Application = () => {
                     <Route path=":presentationId" element={<AnswersPage/>}/>
                 </Route>
                 <Route path="questionAnswers" element={<QuestionAnswersPage/>}/>
-                <Route path="presentation" element={<PresentationCreator userId={userId}/>}/>
+                <Route path="presentation" element={<UserNavbar>
+                    <PresentationCreator userId={userId}/>
+                </UserNavbar>}/>
                 <Route path="layout" element={<LayoutComponent/>}>
                     <Route index element={<AboutPage/>}/>
                     <Route path=":number" element={<AboutPage/>}/>

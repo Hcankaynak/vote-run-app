@@ -25,9 +25,9 @@ interface IPresentationTopic {
 /**
  * TODO
  *
- * [ ] If adding successful navigate to qr page.
+ * [X] If adding successful navigate to qr page.
  * [ ] Design a beautiful list item.
- * [ ] If empty topic, don't create add validation.
+ * [X] If empty topic, don't create add validation.
  */
 
 /**
@@ -36,6 +36,8 @@ interface IPresentationTopic {
  * @constructor
  */
 export const PresentationCreator = (props: IPresentationCreator) => {
+    const [presentationName, setPresentationName] = React.useState<string>("");
+
     const [presentationTopics, setPresentationTopics] = React.useState<IPresentationTopic[]>([]);
     const navigate = useNavigate();
 
@@ -70,11 +72,11 @@ export const PresentationCreator = (props: IPresentationCreator) => {
         const presentationsColRef = collection(db, PRESENTATIONS_COLLECTION_NAME);
         addDoc(presentationsColRef, {
             questions: presentationTopics,
-            userId: props.userId
+            userId: props.userId,
+            presentationName: presentationName
         }).then(presentation => {
             setDoc(doc(db, ANSWERS_COLLECTION_NAME, presentation.id), {}).then(r => console.log(r)).catch(reason => console.log(reason));
-            addDoc(userPresentationsColRef, {
-            }).then(userPresentation => {
+            addDoc(userPresentationsColRef, {}).then(userPresentation => {
                 console.log(userPresentation);
                 navigate("/qrcode", {
                     state: {
@@ -86,7 +88,7 @@ export const PresentationCreator = (props: IPresentationCreator) => {
     }
 
     const checkValidation = () => {
-        return presentationTopics.some((item) => item.topic === "") || presentationTopics.length == 0;
+        return presentationTopics.some((item) => item.topic === "") || presentationTopics.length == 0 || presentationName === "";
     }
 
     const handleOnDragEnd = (context) => {
@@ -117,13 +119,12 @@ export const PresentationCreator = (props: IPresentationCreator) => {
                                                 {...provided.dragHandleProps}
                                             >
                                                 <BiMoveVertical size={20}/>
-                                                <div>{index + 1}</div>
+                                                <div className="topic-element-number">{index + 1}</div>
                                                 <Form.Group className="topic input-element" controlId="formGroupName">
-                                                    <Form.Label>Topic</Form.Label>
                                                     <Form.Control
                                                         required
                                                         type="topic"
-                                                        placeholder="Enter Topic"
+                                                        placeholder="Enter Question"
                                                         onChange={(value) => setPresentationTopics((prevState => {
                                                             const elementIndex = prevState.findIndex((el => el.id === item.id))
                                                             const updatedList = [...prevState];
@@ -150,12 +151,19 @@ export const PresentationCreator = (props: IPresentationCreator) => {
     }
     return (
         <div className="presentation-creator">
+            <Form.Group className="presentation-name" controlId="presentationName">
+                <Form.Label>Presentation Name</Form.Label>
+                <Form.Control
+                    required
+                    placeholder="Enter Presentation Name"
+                    onChange={(value) => setPresentationName(value.target.value)}
+                />
+            </Form.Group>
             {renderPresentationTopics()}
-
-
-            <Button variant="primary" onClick={event => addNewTopic()}>Add new topic</Button>
+            <Button variant="primary" onClick={event => addNewTopic()}>Add New Question</Button>
             <div className="btn-continue-shell">
-                <Button variant="success" disabled={checkValidation()} onClick={event => createPresentation()}>Create Presentation</Button>
+                <Button variant="success" disabled={checkValidation()} onClick={event => createPresentation()}>Create
+                    Presentation</Button>
             </div>
 
         </div>

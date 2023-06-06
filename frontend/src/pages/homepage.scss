@@ -4,6 +4,37 @@
   align-items: center;
   justify-content: center;
 
+  .home-page-content {
+    width: 100%;
+    .home-page-presentations {
+      display: grid;
+      grid-template-columns: auto auto;
+      grid-gap: 3%;
+      padding: 5%;
+
+      .presentation-card {
+        .card-text {
+          font-size: 30px;
+          font-weight: bold;
+        }
+        .card-bottom {
+          display: flex;
+
+          .like-count {
+            display: flex;
+            height: 20px;
+            align-items: center;
+            margin-right: 10px;
+          }
+        }
+      }
+    }
+  }
+
+  .navbar {
+    width: 100%;
+  }
+
   .email {
     margin-top: 50px;
     width: 450px;

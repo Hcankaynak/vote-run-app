@@ -1,45 +1,71 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import "./homepage.scss";
-import {Button} from "react-bootstrap";
 import {useNavigate} from "react-router-dom";
-import {getAuth, signOut} from "firebase/auth";
+import {collection, getDocs, query, where} from "firebase/firestore";
+import {PRESENTATIONS_COLLECTION_NAME} from "./presentation/PresentationCreatorService";
+import {db} from "../config/firebase-config";
+import {Button, Card} from "react-bootstrap";
+import {getAuth} from "firebase/auth";
 
 
-const HomePage = () => {
-    const token = window.localStorage.getItem('auth')
+export interface IHomePage {
+    userId: string;
+}
+
+const HomePage = (props: IHomePage) => {
+    const [presentations, setPresentations] = React.useState([]);
     const navigate = useNavigate();
-    const auth = getAuth();
-    const logout = () => {
-        window.localStorage.removeItem('auth');
-        signOut(auth).then(() => {
-            console.log("Sign-out successful.");
-            navigate("/login")
-        }).catch((error) => {
-            console.log(error);
-        })
 
-    }
+    React.useEffect(() => {
+        const presentationsRef = collection(db, PRESENTATIONS_COLLECTION_NAME);
+        const q = query(presentationsRef, where("userId", "==", props.userId));
+        const querySnapshot = getDocs(q);
+        querySnapshot.then(value => {
+            value.docs.forEach((doc) => {
+                // doc.data() is never undefined for query doc snapshots
+                console.log(doc.id, " => ", doc.data());
+            });
+            setPresentations(value.docs);
+        }).catch(reason => console.log(reason));
+    }, [props.userId])
+
+    const generatePath = (presentationId) => {
+        const hostName = window.location.origin;
+        console.log(hostName + "/" + "answers" + "/" + presentationId);
+        return hostName + "/" + "answers" + "/" + presentationId;
+    };
 
     return (
         <div className="home-page">
-            <>
-                <h1>HomePage</h1>
-                <Button className="logout-button" type="button" onClick={() => logout()}>Logout</Button>
-            </>
             <div className="home-page-content">
-                <Button onClick={() => navigate("presentation")}>
-                    Presentation
-                </Button>
-                <Button onClick={() => navigate("qrcode")}>
-                    qrcode
-                </Button>
-                <Button onClick={() => navigate("questions")}>
-                    questions
-                </Button>
-                <Button onClick={() => navigate("answers")}>
-                    answers
-                </Button>
+                <div className="home-page-presentations">
+                    {
+                        presentations.map((item) => {
+                            return (
+                                <Card key={item.id} className="presentation-card">
+                                    <Card.Body>
+                                        <Card.Text>
+                                            {item?.data()?.presentationName}
+                                        </Card.Text>
+                                        <Button onClick={() => {
+                                            navigate("/qrcode", {
+                                                state: {
+                                                    presentationId: item.id
+                                                }
+                                            })
+                                        }}>Go To QR</Button>
+                                        <Button href={generatePath(item.id)}>Go To Presentation</Button>
+                                        <div className="card-bottom">
+                                            {"Questions: " + item?.data()?.questions.length}
+                                            <div className="like-count">{item.like}</div>
+                                        </div>
+                                    </Card.Body>
+                                </Card>
+                            )
+                        })
+                    }
+                </div>
             </div>
         </div>
     );

@@ -26,12 +26,19 @@
     }
   }
 
+  @media only screen and (max-width: 576px) {
+    .questions-page-content {
+      grid-template-columns: 1fr !important;
+    }
+  }
 
   .questions-page-content {
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: 1fr 1fr;
     grid-gap: 3%;
-    padding: 5%;
+    padding-top: 2%;
+    padding-left: 5%;
+    padding-right: 5%;
 
     .answer-card {
       .card-bottom {
@@ -39,9 +46,13 @@
         flex-direction: row-reverse;
         .like-count {
           display: flex;
-          height: 20px;
+          height: 100%;
           align-items: center;
           margin-right: 10px;
+        }
+
+        .like-icon:active {
+          transform: translateY(4px);
         }
       }
     }

@@ -2,6 +2,7 @@ import {QRCodeGenerator} from "../../components/QRCodeGenerator/QRCodeGenerator"
 import "./qrCodePage.scss";
 import {useLocation} from "react-router-dom";
 import React from "react";
+import {Button} from "react-bootstrap";
 
 export const QRCodePage = () => {
     const {state} = useLocation();
@@ -15,7 +16,7 @@ export const QRCodePage = () => {
     return (
         <div className="qr-code-page-content">
             <QRCodeGenerator qrCodeData={qrCodeData}/>
-            <a href={qrCodeData}>Go To Topics</a>
+            <Button href={qrCodeData}>Go To Presentation</Button>
         </div>
     )
 }

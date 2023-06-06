@@ -3,6 +3,21 @@
   flex-direction: column;
   padding: 30px;
 
+  .presentation-name {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    margin-bottom: 2%;
+    padding: 10px;
+    box-shadow: 0 0 40px -10px rgba(0, 0, 0, .4);
+    border-radius: 6px;
+
+    .form-label {
+      font-size: 23px;
+    }
+  }
+
   .topic-element {
     padding: 10px;
     display: flex;
@@ -11,6 +26,10 @@
     align-items: center;
     box-shadow: 0 0 40px -10px rgba(0, 0, 0, .4);
     border-radius: 6px;
+
+    .topic-element-number {
+      margin-right: 1%;
+    }
 
     .topic {
       display: flex;

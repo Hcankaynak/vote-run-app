@@ -2,7 +2,7 @@ import * as React from 'react';
 import "./questionsAnswersPage.scss";
 import {Button, Card} from "react-bootstrap";
 import {useLocation, useNavigate} from "react-router-dom";
-import {collection, doc, onSnapshot, runTransaction} from "firebase/firestore";
+import {collection, doc, onSnapshot, orderBy, query, runTransaction} from "firebase/firestore";
 import {db} from "../../config/firebase-config";
 import {ANSWERS_COLLECTION_NAME} from "../presentation/PresentationCreatorService";
 import {FaHeart} from "react-icons/fa";
@@ -21,7 +21,7 @@ const QuestionAnswersPage = () => {
     const {state} = useLocation();
     const navigate = useNavigate();
     const hostName = window.location.origin;
-    const {presentationId, questionId, question} = state;
+    const {presentationId, questionId, question, questionNumber} = state;
 
 
     React.useEffect(() => {
@@ -30,7 +30,10 @@ const QuestionAnswersPage = () => {
 
 
     React.useEffect(() => {
-        const unsub = onSnapshot(collection(db, ANSWERS_COLLECTION_NAME, presentationId, questionId), (doc) => {
+        const answersRef = collection(db, ANSWERS_COLLECTION_NAME, presentationId, questionId)
+        const q = query(answersRef, orderBy("timeStamp"));
+        const unsub = onSnapshot(q, (doc) => {
+            console.log(doc);
             convertDBObjectToReactObject(doc.docs);
         });
         return () => unsub();
@@ -73,6 +76,10 @@ const QuestionAnswersPage = () => {
         console.log(answerId);
     }
 
+    const generatePath = (presentationId) => {
+        return "/answers" + "/" + presentationId;
+    };
+
     const likeColorDecider = (answerId: string) => {
         return userLikeStorage ? userLikeStorage[questionId] ? userLikeStorage[questionId][answerId] ? "red" : "gray" : "gray" : "gray";
     }
@@ -81,7 +88,11 @@ const QuestionAnswersPage = () => {
         <div className="questions-page">
             <div className="questions-page-header">
                 <div className="return-button">
-                    <Button onClick={() => navigate(-1)}>
+                    <Button onClick={() => navigate(generatePath(presentationId), {
+                        state: {
+                            questionNumber: questionNumber
+                        }
+                    })}>
                         <MdNavigateBefore size={23} style={{color: 'white'}}/>
                     </Button>
                 </div>
@@ -100,8 +111,10 @@ const QuestionAnswersPage = () => {
                                         {item?.text}
                                     </Card.Text>
                                     <div className="card-bottom">
-                                        <FaHeart size={20} color={likeColorDecider(item.id)}
-                                                 onClick={() => likeAnswer(item.id)}/>
+                                        <div className="like-icon">
+                                            <FaHeart size={20} color="#F91880"
+                                                     onClick={() => likeAnswer(item.id)}/>
+                                        </div>
                                         <div className="like-count">{item.like}</div>
                                     </div>
 

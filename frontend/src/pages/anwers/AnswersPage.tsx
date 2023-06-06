@@ -2,7 +2,7 @@ import * as React from 'react';
 import "./anwersPage.scss"
 import {Alert, Button} from "react-bootstrap";
 import Form from "react-bootstrap/Form";
-import {useNavigate, useParams} from "react-router-dom";
+import {useLocation, useNavigate, useParams} from "react-router-dom";
 import {ANSWERS_COLLECTION_NAME, PRESENTATIONS_COLLECTION_NAME} from "../presentation/PresentationCreatorService";
 import {addDoc, collection, doc, getDoc} from "firebase/firestore";
 import {db} from "../../config/firebase-config";
@@ -10,6 +10,7 @@ import {MdNavigateBefore, MdNavigateNext} from "react-icons/md";
 
 
 const AnswersPage = () => {
+    const {state} = useLocation();
     const [selectedQuestion, setSelectedQuestion] = React.useState(0);
     const [questions, setQuestions] = React.useState([{questionName: "", questionId: 0}]);
     const [answer, setAnswer] = React.useState("");
@@ -20,7 +21,6 @@ const AnswersPage = () => {
     });
     const {presentationId} = useParams();
     const navigate = useNavigate();
-    console.log(nextRef.current);
 
     React.useEffect(() => {
         console.log(presentationId);
@@ -32,6 +32,8 @@ const AnswersPage = () => {
             }, []);
             console.log(ques);
             setQuestions(ques);
+            console.log("asdasd", state?.questionNumber);
+            // setSelectedQuestion(state?.questionNumber - 1);
         });
     }, [presentationId]);
 
@@ -40,7 +42,8 @@ const AnswersPage = () => {
         const answerRef = collection(db, ANSWERS_COLLECTION_NAME, presentationId, questionId);
         addDoc(answerRef, {
             text: answer,
-            like: 0
+            like: 0,
+            timeStamp: Date.now()
         }).then(r => {
             setShow({isShown: true, type: "success"});
             setTimeout(() => {
@@ -61,21 +64,14 @@ const AnswersPage = () => {
             state: {
                 presentationId: presentationId,
                 questionId: questions[selectedQuestion].questionId + "",
-                question: questions[selectedQuestion].questionName
+                question: questions[selectedQuestion].questionName,
+                questionNumber: selectedQuestion
             }
         })
     }
 
     return (
         <div className="answers-page">
-            {show.isShown &&
-                <Alert key={show.type} variant={show.type} onClose={() => setShow({...show, isShown: false})}
-                       dismissible>
-                    <Alert.Heading>Success</Alert.Heading>
-                    <p>
-                        Successfully submitted.
-                    </p>
-                </Alert>}
             <div className="answers-page-header">
                 <div className="answers-page-header-content">
                     <div className="prev">
@@ -140,6 +136,15 @@ const AnswersPage = () => {
                             }}>Submit</Button>
                 </div>
             </div>
+            {show.isShown &&
+                <div className="answer-alert">
+                    <Alert key={show.type} variant={show.type} onClose={() => setShow({...show, isShown: false})}>
+                        <Alert.Heading>Success</Alert.Heading>
+                        <p>
+                            Successfully submitted.
+                        </p>
+                    </Alert>
+                </div>}
         </div>
     )
 }
