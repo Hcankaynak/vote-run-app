@@ -20,7 +20,7 @@ Todos:
 
 [ ] register and login request needs to jump through backend
 <br>
-[ ] add presentation needs to save to db.
+[X] add presentation needs to save to db.
 <br>
 [ ] error handling for backend, shutting down.
 <br>
