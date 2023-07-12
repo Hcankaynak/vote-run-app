@@ -3,11 +3,16 @@ import Navbar from 'react-bootstrap/Navbar';
 import Container from "react-bootstrap/Container";
 import {NavDropdown} from "react-bootstrap";
 import {getAuth, signOut} from "firebase/auth";
-import {useNavigate} from "react-router-dom";
 import React from "react";
+import "./userNavbar.scss";
+import {useNavigate} from "react-router-dom";
 
-export const UserNavbar = (props) => {
-    const token = window.localStorage.getItem('auth')
+export interface IUserNavbarProps {
+    children?: any;
+}
+
+export const UserNavbar = ({children}: IUserNavbarProps) => {
+    const token = window.localStorage.getItem('auth');
     const navigate = useNavigate();
     const auth = getAuth();
     const logout = () => {
@@ -30,7 +35,6 @@ export const UserNavbar = (props) => {
                     window.localStorage.setItem('auth', token);
                 })
             } else {
-                navigate("/login");
             }
         })
     }, [])
@@ -39,7 +43,7 @@ export const UserNavbar = (props) => {
         <>
             <Navbar bg="primary" variant="dark">
                 <Container>
-                    <Navbar.Brand onClick={() => navigate("/")}>Home</Navbar.Brand>
+                    <Navbar.Brand onClick={() => navigate("/")}>Answer Meter</Navbar.Brand>
                     <Nav>
                         <Nav.Link onClick={() => navigate("/presentation")}>Create Presentation</Nav.Link>
 
@@ -49,7 +53,6 @@ export const UserNavbar = (props) => {
                     </Nav>
                 </Container>
             </Navbar>
-            {props.children}
         </>
     );
 };

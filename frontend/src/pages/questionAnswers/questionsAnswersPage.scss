@@ -3,6 +3,7 @@
   flex-direction: column;
   width: 100%;
   padding-top: 2%;
+  min-height: 87.4vh;
 
   .questions-page-header {
     display: flex;
@@ -29,6 +30,8 @@
   @media only screen and (max-width: 576px) {
     .questions-page-content {
       grid-template-columns: 1fr !important;
+      grid-gap: 1% !important;
+      margin-bottom: 26rem !important;
     }
   }
 
@@ -39,6 +42,7 @@
     padding-top: 2%;
     padding-left: 5%;
     padding-right: 5%;
+    margin-bottom: 21rem !important;
 
     .answer-card {
       .card-bottom {

@@ -3,10 +3,9 @@ import "bootstrap/dist/css/bootstrap.css";
 import "./homepage.scss";
 import {useNavigate} from "react-router-dom";
 import {collection, getDocs, query, where} from "firebase/firestore";
-import {PRESENTATIONS_COLLECTION_NAME} from "./presentation/PresentationCreatorService";
-import {db} from "../config/firebase-config";
+import {PRESENTATIONS_COLLECTION_NAME} from "../presentation/PresentationCreatorService";
 import {Button, Card} from "react-bootstrap";
-import {getAuth} from "firebase/auth";
+import {db} from "../../config/firebase-config";
 
 
 export interface IHomePage {

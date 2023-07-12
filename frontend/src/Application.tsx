@@ -1,6 +1,6 @@
-import {BrowserRouter, Route, Routes} from "react-router-dom";
+import {Route, Routes} from "react-router-dom";
 import AboutPage from "./pages/AboutPage";
-import HomePage from "./pages/HomePage";
+import HomePage from "./pages/home/HomePage";
 import {LayoutComponent} from "./components/LayoutComponent";
 import LoginPage from "./pages/login/LoginPage";
 import RegisterPage from "./pages/register/RegisterPage";
@@ -13,9 +13,10 @@ import AnswersPage from "./pages/anwers/AnswersPage";
 import QuestionAnswersPage from "./pages/questionAnswers/QuestionAnswersPage";
 import {QRCodePage} from "./pages/qrCode/QRCodePage";
 import {UserNavbar} from "./components/UserNavbar/UserNavbar";
+import Footer from "./components/Footer/Footer";
+import "./application.scss";
 
 const Application = () => {
-
     const auth = getAuth();
     const [userId, setUserId] = React.useState("");
     React.useEffect(() => {
@@ -30,14 +31,14 @@ const Application = () => {
         })
     }, [])
     return (
-        <BrowserRouter>
+        <div className="application">
+            <UserNavbar/>
             <Routes>
                 {
                     // TODO: update here, when login and register pages are finished.
-                    // TODO: LayoutComponent should be applied all pages.
                     // TODO: add error path
                 }
-                <Route path="/" element={<UserNavbar><HomePage userId={userId}/></UserNavbar>}/>
+                <Route path="/" element={<HomePage userId={userId}/>}/>
                 <Route path="about">
                     <Route index element={<AboutPage/>}/>
                     <Route path=":number" element={<AboutPage/>}/>
@@ -47,18 +48,18 @@ const Application = () => {
                 <Route path="qrcode" element={<QRCodePage/>}/>
                 <Route path="answers">
                     <Route index element={<AnswersPage/>}/>
-                    <Route path=":presentationId" element={<AnswersPage/>}/>
+                    <Route path=":presentationId"
+                           element={<AnswersPage/>}/>
                 </Route>
                 <Route path="questionAnswers" element={<QuestionAnswersPage/>}/>
-                <Route path="presentation" element={<UserNavbar>
-                    <PresentationCreator userId={userId}/>
-                </UserNavbar>}/>
+                <Route path="presentation" element={<PresentationCreator userId={userId}/>}/>
                 <Route path="layout" element={<LayoutComponent/>}>
                     <Route index element={<AboutPage/>}/>
                     <Route path=":number" element={<AboutPage/>}/>
                 </Route>
             </Routes>
-        </BrowserRouter>
+            <Footer/>
+        </div>
     );
 };
 
