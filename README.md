@@ -18,19 +18,19 @@ Backend ws ends:
 
 Todos:
 
-[ ] write authenticate hook and redirect
+[ ] register and login request needs to jump through backend
 <br>
 [ ] write separate pages for question answers (user, no interaction)
 <br>
-[ ] answers can be liked once
+[ ] error handling for backend, shutting down.
 <br>
-[ ] like button upgrade animation
+[ ] check responsive design for all pages.
 <br>
-[ ] Add Excel export
+[ ] add nav bar.
 <br>
-[ ] Finish presentation prevent adding new answers
+[ ] write a shell component that render header and footer.
 <br>
-[ ] Add presentation copy link button
+[ ] add navigation.
 <br>
-[ ] add spinner to page loading.
+[ ] question page return icon color white
 <br>
