@@ -30,8 +30,23 @@
   @media only screen and (max-width: 576px) {
     .questions-page-content {
       grid-template-columns: 1fr !important;
-      grid-gap: 1% !important;
+      grid-gap: 8% !important;
       margin-bottom: 26rem !important;
+    }
+
+    .no-records {
+      margin-top: 2%;
+      text-align: center;
+      font-size: 1rem !important;
+      font-weight: bold;
+    }
+
+    .answer-card {
+      .card-body {
+        .card-text {
+          font-size: unset !important;
+        }
+      }
     }
   }
 
@@ -45,9 +60,16 @@
     margin-bottom: 21rem !important;
 
     .answer-card {
+      .card-body {
+        .card-text {
+          font-size: 2rem;
+        }
+      }
+
       .card-bottom {
         display: flex;
         flex-direction: row-reverse;
+
         .like-count {
           display: flex;
           height: 100%;
@@ -60,5 +82,17 @@
         }
       }
     }
+  }
+
+  .no-records {
+    margin-top: 2%;
+    text-align: center;
+    font-size: 3rem;
+    font-weight: bold;
+  }
+
+  .spinner-shell {
+    display: flex;
+    justify-content: center;
   }
 }

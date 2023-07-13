@@ -26,11 +26,9 @@ Todos:
 <br>
 [ ] check responsive design for all pages.
 <br>
-[ ] add nav bar.
+[ ] add search bar for homepage.
 <br>
-[ ] write a shell component that render header and footer.
+[ ] mobile navbar not logged-in user
 <br>
-[ ] add navigation.
-<br>
-[ ] question page return icon color white
+[ ] log-out is broken. logged out and can access homepage content.
 <br>

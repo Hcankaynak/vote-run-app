@@ -18,10 +18,11 @@ interface IAnswer {
 const QuestionAnswersPage = () => {
     const [topicAllAnswer, setTopicAllAnswer] = React.useState<IAnswer[]>([]);
     const [userLikeStorage, setUserLikeStorage] = React.useState({});
+    const [isLoading, setLoading] = React.useState(true);
     const {state} = useLocation();
     const navigate = useNavigate();
     const hostName = window.location.origin;
-    const {presentationId, questionId, question, questionNumber} = state;
+    const {presentationId, questions, selectedQuestion} = state;
 
 
     React.useEffect(() => {
@@ -30,11 +31,11 @@ const QuestionAnswersPage = () => {
 
 
     React.useEffect(() => {
-        const answersRef = collection(db, ANSWERS_COLLECTION_NAME, presentationId, questionId)
+        const answersRef = collection(db, ANSWERS_COLLECTION_NAME, presentationId, questions[selectedQuestion]?.questionId + "")
         const q = query(answersRef, orderBy("timeStamp"));
         const unsub = onSnapshot(q, (doc) => {
-            console.log(doc);
             convertDBObjectToReactObject(doc.docs);
+            setLoading(false);
         });
         return () => unsub();
     }, []);
@@ -55,7 +56,7 @@ const QuestionAnswersPage = () => {
 
     const likeAnswer = async (answerId: string) => {
         try {
-            const sfDocRef = doc(db, ANSWERS_COLLECTION_NAME, presentationId, questionId, answerId);
+            const sfDocRef = doc(db, ANSWERS_COLLECTION_NAME, presentationId, questions[selectedQuestion]?.questionId, answerId);
 
             const answerTransaction = await runTransaction(db, async (transaction) => {
                 const sfDoc = await transaction.get(sfDocRef);
@@ -66,8 +67,8 @@ const QuestionAnswersPage = () => {
                 transaction.update(sfDocRef, {like: newPopulation});
             });
             const newUserLikeItem = {}
-            newUserLikeItem[questionId] = {}
-            newUserLikeItem[questionId][sfDocRef.id] = 1;
+            newUserLikeItem[questions[selectedQuestion].questionId] = {}
+            newUserLikeItem[questions[selectedQuestion].questionId][sfDocRef.id] = 1;
             localStorage.setItem(presentationId, JSON.stringify(newUserLikeItem));
             console.log("Transaction successfully committed!");
         } catch (e) {
@@ -80,55 +81,60 @@ const QuestionAnswersPage = () => {
         return "/answers" + "/" + presentationId;
     };
 
-    const likeColorDecider = (answerId: string) => {
-        return userLikeStorage ? userLikeStorage[questionId] ? userLikeStorage[questionId][answerId] ? "red" : "gray" : "gray" : "gray";
-    }
-
     return (
         <div className="questions-page">
             <div className="questions-page-header">
                 <div className="return-button">
                     <Button onClick={() => navigate(generatePath(presentationId), {
                         state: {
-                            questionNumber: questionNumber
+                            questions,
+                            selectedQuestion
                         }
                     })}>
                         <MdNavigateBefore size={23} style={{color: 'white'}}/>
                     </Button>
                 </div>
                 <div className="question-header">
-                    {question}
+                    {questions[selectedQuestion].questionName}
                 </div>
             </div>
             <hr/>
-            <div className="questions-page-content">
-                {
-                    topicAllAnswer.map((item) => {
-                        return (
-                            <Card key={item.id} className="answer-card">
-                                <Card.Body>
-                                    <Card.Text>
-                                        {item?.text}
-                                    </Card.Text>
-                                    <div className="card-bottom">
-                                        <div className="like-icon">
-                                            <FaHeart size={20} color="#F91880"
-                                                     onClick={() => likeAnswer(item.id)}/>
+            {
+                isLoading ? <div className="spinner-shell">
+                    <div className="spinner-border" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                    </div>
+                </div> : topicAllAnswer.length > 0 ? <div className="questions-page-content">
+                    {
+                        topicAllAnswer.map((item) => {
+                            return (
+                                <Card key={item.id} className="answer-card">
+                                    <Card.Body>
+                                        <Card.Text>
+                                            {item?.text}
+                                        </Card.Text>
+                                        <div className="card-bottom">
+                                            <div className="like-icon">
+                                                <FaHeart size={20} color="#F91880"
+                                                         onClick={() => likeAnswer(item.id)}/>
+                                            </div>
+                                            <div className="like-count">{item.like}</div>
                                         </div>
-                                        <div className="like-count">{item.like}</div>
-                                    </div>
 
-                                    {/*TODO: create like button*/}
-                                    {/*user click only once store pres id, quest id, answer id in local storage.*/}
-                                    {/*if in local storage change button color*/}
-                                    {/*if user un like delete from local storage*/}
+                                        {/*TODO: create like button*/}
+                                        {/*user click only once store pres id, quest id, answer id in local storage.*/}
+                                        {/*if in local storage change button color*/}
+                                        {/*if user un like delete from local storage*/}
 
-                                </Card.Body>
-                            </Card>
-                        )
-                    })
-                }
-            </div>
+                                    </Card.Body>
+                                </Card>
+                            )
+                        })
+                    }
+                </div> : <div className="no-records">
+                    There is no records to show
+                </div>
+            }
         </div>
     )
 }

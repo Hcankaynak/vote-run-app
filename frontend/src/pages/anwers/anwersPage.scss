@@ -5,6 +5,11 @@
   height: 500px;
   min-height: 87.4vh;
 
+  .spinner-shell {
+    display: flex;
+    justify-content: center;
+  }
+
   .answers-page-header {
     display: flex;
     width: 100%;
@@ -44,6 +49,7 @@
     font-size: larger;
     font-weight: bold;
   }
+
   .answer-section {
     display: flex;
     justify-content: center;

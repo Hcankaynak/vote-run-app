@@ -38,7 +38,7 @@ interface IPresentationTopic {
 export const PresentationCreator = (props: IPresentationCreator) => {
     const [presentationName, setPresentationName] = React.useState<string>("");
 
-    const [presentationTopics, setPresentationTopics] = React.useState<IPresentationTopic[]>([]);
+    const [presentationTopics, setPresentationTopics] = React.useState<IPresentationTopic[]>([{id: new Date().getTime(), topic: ""}]);
     const navigate = useNavigate();
 
     const deleteTopic = (id: number) => {
@@ -160,7 +160,9 @@ export const PresentationCreator = (props: IPresentationCreator) => {
                 />
             </Form.Group>
             {renderPresentationTopics()}
-            <Button variant="primary" onClick={event => addNewTopic()}>Add New Question</Button>
+            <div className="add-new-question-button-shell">
+                <Button variant="primary" onClick={event => addNewTopic()}> <i className="fas fa-plus plus-icon"></i></Button>
+            </div>
             <div className="btn-continue-shell">
                 <Button variant="success" disabled={checkValidation()} onClick={event => createPresentation()}>Create
                     Presentation</Button>
