@@ -6,15 +6,19 @@ import {getAuth, signOut} from "firebase/auth";
 import React from "react";
 import "./userNavbar.scss";
 import {useNavigate} from "react-router-dom";
+import useAuthenticate from "../../hooks/Authentication";
 
 export interface IUserNavbarProps {
-    children?: any;
 }
 
-export const UserNavbar = ({children}: IUserNavbarProps) => {
+export const UserNavbar = (props: IUserNavbarProps) => {
+    const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+
     const token = window.localStorage.getItem('auth');
     const navigate = useNavigate();
     const auth = getAuth();
+    useAuthenticate({setIsLoggedIn})
+
     const logout = () => {
         window.localStorage.removeItem('auth');
         signOut(auth).then(() => {
@@ -25,32 +29,27 @@ export const UserNavbar = ({children}: IUserNavbarProps) => {
         })
     }
 
-    React.useEffect(() => {
-        // TODO: how to revoke token ?
-        auth.onAuthStateChanged((userCred) => {
-            if (userCred) {
-                window.localStorage.setItem('auth', userCred.email);
-                userCred.getIdToken().then((token) => {
-                    console.log(token);
-                    window.localStorage.setItem('auth', token);
-                })
-            } else {
-            }
-        })
-    }, [])
+    const goToHome = () => {
+        if (isLoggedIn) {
+            navigate("/")
+        }
+    }
 
     return (
         <>
             <Navbar bg="primary" variant="dark">
                 <Container>
-                    <Navbar.Brand onClick={() => navigate("/")}>Answer Meter</Navbar.Brand>
-                    <Nav>
-                        <Nav.Link onClick={() => navigate("/presentation")}>Create Presentation</Nav.Link>
+                    <Navbar.Brand onClick={() => goToHome()}>Answer Meter</Navbar.Brand>
+                    {
+                        isLoggedIn && <Nav>
+                            <Nav.Link onClick={() => navigate("/presentation")}>Create
+                                Presentation</Nav.Link>
 
-                        <NavDropdown title="user" id="basic-nav-dropdown">
-                            <NavDropdown.Item onClick={() => logout()}> Logout </NavDropdown.Item>
-                        </NavDropdown>
-                    </Nav>
+                            <NavDropdown title="user" id="basic-nav-dropdown">
+                                <NavDropdown.Item onClick={() => logout()}> Logout </NavDropdown.Item>
+                            </NavDropdown>
+                        </Nav>
+                    }
                 </Container>
             </Navbar>
         </>

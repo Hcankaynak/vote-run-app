@@ -6,17 +6,32 @@
 
   .home-page-content {
     width: 100%;
+
+    .search-bar-shell {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 1%;
+      margin-right: 5%;
+    }
+
+    .spinner-shell {
+      display: flex;
+      justify-content: center;
+      margin-top: 10%;
+    }
+
     .home-page-presentations {
       display: grid;
       grid-template-columns: auto auto;
       grid-gap: 3%;
-      padding: 5%;
+      padding: 2% 5% 5% 5%;
 
       .presentation-card {
         .card-text {
           font-size: 30px;
           font-weight: bold;
         }
+
         .card-bottom {
           display: flex;
           font-weight: bold;

@@ -12,6 +12,7 @@ import {
     PRESENTATIONS_COLLECTION_NAME,
     USER_PRESENTATIONS_COLLECTION_NAME
 } from "./PresentationCreatorService";
+import useAuthenticate from "../../hooks/Authentication";
 
 export interface IPresentationCreator {
     userId: string;
@@ -40,6 +41,7 @@ export const PresentationCreator = (props: IPresentationCreator) => {
 
     const [presentationTopics, setPresentationTopics] = React.useState<IPresentationTopic[]>([{id: new Date().getTime(), topic: ""}]);
     const navigate = useNavigate();
+    useAuthenticate({forceLogin: true})
 
     const deleteTopic = (id: number) => {
         setPresentationTopics((prev) => {

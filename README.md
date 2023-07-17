@@ -18,17 +18,15 @@ Backend ws ends:
 
 Todos:
 
-[ ] register and login request needs to jump through backend
-<br>
 [ ] write separate pages for question answers (user, no interaction)
-<br>
-[ ] error handling for backend, shutting down.
 <br>
 [ ] check responsive design for all pages.
 <br>
-[ ] add search bar for homepage.
+[X] add search bar for homepage.
 <br>
-[ ] mobile navbar not logged-in user
+[X] mobile navbar not logged-in user
 <br>
-[ ] log-out is broken. logged out and can access homepage content.
+[X] log-out is broken. logged out and can access homepage content.
+<br>
+[ ] only liked once feature.
 <br>

@@ -6,6 +6,8 @@ import {collection, getDocs, query, where} from "firebase/firestore";
 import {PRESENTATIONS_COLLECTION_NAME} from "../presentation/PresentationCreatorService";
 import {Button, Card} from "react-bootstrap";
 import {db} from "../../config/firebase-config";
+import SearchBar from "../../components/SearchBar/SearchBar";
+import useAuthenticate from "../../hooks/Authentication";
 
 
 export interface IHomePage {
@@ -14,7 +16,10 @@ export interface IHomePage {
 
 const HomePage = (props: IHomePage) => {
     const [presentations, setPresentations] = React.useState([]);
+    const [isLoading, setLoading] = React.useState(true);
+    const [searchedText, setSearchedText] = React.useState("");
     const navigate = useNavigate();
+    useAuthenticate({forceLogin: true})
 
     React.useEffect(() => {
         const presentationsRef = collection(db, PRESENTATIONS_COLLECTION_NAME);
@@ -25,6 +30,7 @@ const HomePage = (props: IHomePage) => {
                 // doc.data() is never undefined for query doc snapshots
                 console.log(doc.id, " => ", doc.data());
             });
+            setLoading(false);
             setPresentations(value.docs);
         }).catch(reason => console.log(reason));
     }, [props.userId])
@@ -35,36 +41,56 @@ const HomePage = (props: IHomePage) => {
         return hostName + "/" + "answers" + "/" + presentationId;
     };
 
+    const renderPresentations = () => {
+        if (isLoading) {
+            return (
+                <div className="spinner-shell">
+                    <div className="spinner-border" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            );
+        }
+        return (
+            <div className="home-page-presentations">
+                {
+                    presentations.filter((value) => value.data()?.presentationName.includes(searchedText)).map((item) => {
+                        return (
+                            <Card key={item.id} className="presentation-card">
+                                <Card.Body>
+                                    <Card.Text>
+                                        {item?.data()?.presentationName}
+                                    </Card.Text>
+                                    <Button onClick={() => {
+                                        navigate("/qrcode", {
+                                            state: {
+                                                presentationId: item.id
+                                            }
+                                        })
+                                    }}>Go To QR</Button>
+                                    <Button href={generatePath(item.id)}>Go To Presentation</Button>
+                                    <div className="card-bottom">
+                                        {"Questions: " + item?.data()?.questions.length}
+                                        <div className="like-count">{item.like}</div>
+                                    </div>
+                                </Card.Body>
+                            </Card>
+                        )
+                    })
+                }
+            </div>
+        )
+    }
+
     return (
         <div className="home-page">
             <div className="home-page-content">
-                <div className="home-page-presentations">
-                    {
-                        presentations.map((item) => {
-                            return (
-                                <Card key={item.id} className="presentation-card">
-                                    <Card.Body>
-                                        <Card.Text>
-                                            {item?.data()?.presentationName}
-                                        </Card.Text>
-                                        <Button onClick={() => {
-                                            navigate("/qrcode", {
-                                                state: {
-                                                    presentationId: item.id
-                                                }
-                                            })
-                                        }}>Go To QR</Button>
-                                        <Button href={generatePath(item.id)}>Go To Presentation</Button>
-                                        <div className="card-bottom">
-                                            {"Questions: " + item?.data()?.questions.length}
-                                            <div className="like-count">{item.like}</div>
-                                        </div>
-                                    </Card.Body>
-                                </Card>
-                            )
-                        })
-                    }
+                <div className="search-bar-shell">
+                    <SearchBar setText={setSearchedText}/>
                 </div>
+                {
+                    renderPresentations()
+                }
             </div>
         </div>
     );
