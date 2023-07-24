@@ -7,6 +7,7 @@ import React from "react";
 import "./userNavbar.scss";
 import {useNavigate} from "react-router-dom";
 import useAuthenticate from "../../hooks/Authentication";
+import {v4} from "uuid";
 
 export interface IUserNavbarProps {
 }
@@ -18,6 +19,13 @@ export const UserNavbar = (props: IUserNavbarProps) => {
     const navigate = useNavigate();
     const auth = getAuth();
     useAuthenticate({setIsLoggedIn})
+
+    React.useEffect(() => {
+        const userId = window.localStorage.getItem('userId');
+        if (userId == null) {
+            window.localStorage.setItem('userId', v4());
+        }
+    }, []);
 
     const logout = () => {
         window.localStorage.removeItem('auth');
@@ -39,7 +47,7 @@ export const UserNavbar = (props: IUserNavbarProps) => {
         <>
             <Navbar bg="primary" variant="dark">
                 <Container>
-                    <Navbar.Brand onClick={() => goToHome()}>Answer Meter</Navbar.Brand>
+                    <Navbar.Brand onClick={() => goToHome()}>Vote Run App</Navbar.Brand>
                     {
                         isLoggedIn && <Nav>
                             <Nav.Link onClick={() => navigate("/presentation")}>Create

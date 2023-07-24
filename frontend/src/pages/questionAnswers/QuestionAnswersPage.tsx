@@ -5,14 +5,16 @@ import {useLocation, useNavigate} from "react-router-dom";
 import {collection, doc, onSnapshot, orderBy, query, runTransaction} from "firebase/firestore";
 import {db} from "../../config/firebase-config";
 import {ANSWERS_COLLECTION_NAME} from "../presentation/PresentationCreatorService";
-import {FaHeart} from "react-icons/fa";
 import {getItemFromLocalStorage} from "../../Utils/LocalStorage";
 import {MdNavigateBefore} from "react-icons/md";
+import usePromiseHandler from "../../hooks/PromiseHandler";
+import {minZeroDecrease} from "../../Utils/Math";
 
 interface IAnswer {
     text: string;
     like: number;
     id: string;
+    isLiked: boolean;
 }
 
 const QuestionAnswersPage = () => {
@@ -23,12 +25,14 @@ const QuestionAnswersPage = () => {
     const navigate = useNavigate();
     const hostName = window.location.origin;
     const {presentationId, questions, selectedQuestion} = state;
+    const userId = window.localStorage.getItem('userId');
+
+    const [addNewPromise] = usePromiseHandler();
 
 
     React.useEffect(() => {
         setUserLikeStorage(getItemFromLocalStorage());
     }, [topicAllAnswer])
-
 
     React.useEffect(() => {
         const answersRef = collection(db, ANSWERS_COLLECTION_NAME, presentationId, questions[selectedQuestion]?.questionId + "")
@@ -42,34 +46,44 @@ const QuestionAnswersPage = () => {
 
     const convertDBObjectToReactObject = (docs) => {
         const ans = docs.reduce((accum, item) => {
-            accum.push({text: item.get("text"), like: item.get("like"), id: item.id});
+            let isLiked = false;
+            console.log(item.get("users"))
+            console.log(userId);
+            if (item.get("users") != null && item.get("users")[userId]) {
+                isLiked = true;
+            }
+            accum.push({text: item.get("text"), like: item.get("like"), id: item.id, isLiked: isLiked});
             return accum;
         }, []);
         setTopicAllAnswer(ans);
     }
 
-    const decideIncreaseOrDecrease = (answerId, likeCount: number): number => {
-        // userLikeStorage?.answerId
-        // if local storage has it, decrease; if number is zero return zero;, otherwise increase
-        return likeCount + 1;
+    const decideIncreaseOrDecrease = (likeCount: number, isIncrease: boolean): number => {
+        if (isIncrease) {
+            return likeCount + 1;
+        }
+        return minZeroDecrease(likeCount);
     }
 
-    const likeAnswer = async (answerId: string) => {
-        try {
-            const sfDocRef = doc(db, ANSWERS_COLLECTION_NAME, presentationId, questions[selectedQuestion]?.questionId, answerId);
 
-            const answerTransaction = await runTransaction(db, async (transaction) => {
+    const updateCount = (isIncrease: boolean, answerId: string) => {
+        try {
+            const sfDocRef = doc(db, ANSWERS_COLLECTION_NAME, presentationId, questions[selectedQuestion]?.questionId.toString(), answerId);
+            const answerTransaction = runTransaction(db, async (transaction) => {
                 const sfDoc = await transaction.get(sfDocRef);
                 if (!sfDoc.exists()) {
                     throw "Document does not exist!";
                 }
-                const newPopulation = decideIncreaseOrDecrease(answerId, sfDoc.data().like);
-                transaction.update(sfDocRef, {like: newPopulation});
+                const newPopulation = decideIncreaseOrDecrease(sfDoc.data().like, isIncrease);
+                const newUsers = sfDoc.data().users;
+                if (!newUsers[userId] && isIncrease) {
+                    newUsers[userId] = 1;
+                } else if (newUsers[userId] && !isIncrease) {
+                    delete newUsers[userId];
+                }
+                transaction.update(sfDocRef, {like: newPopulation, users: newUsers});
             });
-            const newUserLikeItem = {}
-            newUserLikeItem[questions[selectedQuestion].questionId] = {}
-            newUserLikeItem[questions[selectedQuestion].questionId][sfDocRef.id] = 1;
-            localStorage.setItem(presentationId, JSON.stringify(newUserLikeItem));
+            // addNewPromise(answerTransaction);
             console.log("Transaction successfully committed!");
         } catch (e) {
             console.log("Transaction failed: ", e);
@@ -80,6 +94,14 @@ const QuestionAnswersPage = () => {
     const generatePath = (presentationId) => {
         return "/answers" + "/" + presentationId;
     };
+
+    const onClickLike = (answerId, isLiked: boolean) => {
+        setTopicAllAnswer((prev) => {
+            prev.find((item) => item.id === answerId).isLiked = !isLiked;
+            return [...prev];
+        })
+        updateCount(!isLiked, answerId);
+    }
 
     return (
         <div className="questions-page">
@@ -114,18 +136,13 @@ const QuestionAnswersPage = () => {
                                             {item?.text}
                                         </Card.Text>
                                         <div className="card-bottom">
-                                            <div className="like-icon">
-                                                <FaHeart size={20} color="#F91880"
-                                                         onClick={() => likeAnswer(item.id)}/>
+                                            <div className={"like-icon " + (item.isLiked ? "liked" : "")}
+                                                 onClick={() => onClickLike(item.id, item.isLiked)}>
+                                                <i className="fas fa-heart fa-lg"/>
                                             </div>
+
                                             <div className="like-count">{item.like}</div>
                                         </div>
-
-                                        {/*TODO: create like button*/}
-                                        {/*user click only once store pres id, quest id, answer id in local storage.*/}
-                                        {/*if in local storage change button color*/}
-                                        {/*if user un like delete from local storage*/}
-
                                     </Card.Body>
                                 </Card>
                             )

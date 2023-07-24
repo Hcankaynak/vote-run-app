@@ -50,7 +50,8 @@ const AnswersPage = () => {
         addDoc(answerRef, {
             text: answer,
             like: 0,
-            timeStamp: Date.now()
+            timeStamp: Date.now(),
+            users: {}
         }).then(r => {
             setShow({isShown: true, type: "success"});
             setTimeout(() => {

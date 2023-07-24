@@ -22,11 +22,15 @@ Todos:
 <br>
 [ ] check responsive design for all pages.
 <br>
-[X] add search bar for homepage.
+[X] only liked once feature.
 <br>
-[X] mobile navbar not logged-in user
+[ ] Excel export
 <br>
-[X] log-out is broken. logged out and can access homepage content.
+[ ] Send mail
 <br>
-[ ] only liked once feature.
+[ ] Fix transaction structure.
+<br>
+[ ] Add confetti effect to like button
+<br>
+[ ] Presentation order
 <br>
