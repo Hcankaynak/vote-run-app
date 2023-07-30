@@ -13,6 +13,7 @@
     "@types/react-dom": "^18.0.8",
     "axios": "^1.2.1",
     "bootstrap": "^5.2.2",
+    "detectincognitojs": "^1.3.0",
     "firebase": "^9.22.1",
     "mdb-react-ui-kit": "^6.1.0",
     "react": "^18.2.0",

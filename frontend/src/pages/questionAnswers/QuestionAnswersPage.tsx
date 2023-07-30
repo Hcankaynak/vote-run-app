@@ -1,6 +1,6 @@
 import * as React from 'react';
 import "./questionsAnswersPage.scss";
-import {Button, Card} from "react-bootstrap";
+import {Button, Card, Modal} from "react-bootstrap";
 import {useLocation, useNavigate} from "react-router-dom";
 import {collection, doc, onSnapshot, orderBy, query, runTransaction} from "firebase/firestore";
 import {db} from "../../config/firebase-config";
@@ -9,6 +9,7 @@ import {getItemFromLocalStorage} from "../../Utils/LocalStorage";
 import {MdNavigateBefore} from "react-icons/md";
 import usePromiseHandler from "../../hooks/PromiseHandler";
 import {minZeroDecrease} from "../../Utils/Math";
+import {detectIncognito} from "detectincognitojs";
 
 interface IAnswer {
     text: string;
@@ -21,6 +22,7 @@ const QuestionAnswersPage = () => {
     const [topicAllAnswer, setTopicAllAnswer] = React.useState<IAnswer[]>([]);
     const [userLikeStorage, setUserLikeStorage] = React.useState({});
     const [isLoading, setLoading] = React.useState(true);
+    const [isShow, setIsShow] = React.useState(false);
     const {state} = useLocation();
     const navigate = useNavigate();
     const hostName = window.location.origin;
@@ -99,6 +101,17 @@ const QuestionAnswersPage = () => {
     };
 
     const onClickLike = (answerId, isLiked: boolean) => {
+        detectIncognito().then((result) => {
+            console.log(result.browserName, result.isPrivate);
+            if (result.isPrivate) {
+                setIsShow(true);
+            } else {
+                likeAnswer(answerId, isLiked);
+            }
+        })
+    }
+
+    const likeAnswer = (answerId, isLiked: boolean) => {
         setTopicAllAnswer((prev) => {
             prev.find((item) => item.id === answerId).isLiked = !isLiked;
             return [...prev];
@@ -108,6 +121,12 @@ const QuestionAnswersPage = () => {
 
     return (
         <div className="questions-page">
+            <Modal show={isShow} onHide={() => setIsShow(false)} animation={false}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Error!</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>You can't use like in incognito mode.</Modal.Body>
+            </Modal>
             <div className="questions-page-header">
                 <div className="return-button">
                     <Button onClick={() => navigate(generatePath(presentationId), {
