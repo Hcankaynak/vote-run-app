@@ -15,6 +15,7 @@ import {QRCodePage} from "./pages/qrCode/QRCodePage";
 import {UserNavbar} from "./components/UserNavbar/UserNavbar";
 import Footer from "./components/Footer/Footer";
 import "./application.scss";
+import PresentationsPage from "./pages/presentations/PresentationsPage";
 
 const Application = () => {
     const auth = getAuth();
@@ -53,6 +54,11 @@ const Application = () => {
                 </Route>
                 <Route path="questionAnswers" element={<QuestionAnswersPage/>}/>
                 <Route path="presentation" element={<PresentationCreator userId={userId}/>}/>
+                <Route path="presentations">
+                    <Route index element={<PresentationsPage/>}/>
+                    <Route path=":presentationId"
+                           element={<PresentationsPage/>}/>
+                </Route>
                 <Route path="layout" element={<LayoutComponent/>}>
                     <Route index element={<AboutPage/>}/>
                     <Route path=":number" element={<AboutPage/>}/>

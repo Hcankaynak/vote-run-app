@@ -47,12 +47,15 @@ const QuestionAnswersPage = () => {
     const convertDBObjectToReactObject = (docs) => {
         const ans = docs.reduce((accum, item) => {
             let isLiked = false;
-            console.log(item.get("users"))
-            console.log(userId);
-            if (item.get("users") != null && item.get("users")[userId]) {
+            const users = item.get("users");
+            let likeCount = 0;
+            if (users != null) {
+                likeCount = Object.keys(users)?.length;
+            }
+            if (users != null && users[userId]) {
                 isLiked = true;
             }
-            accum.push({text: item.get("text"), like: item.get("like"), id: item.id, isLiked: isLiked});
+            accum.push({text: item.get("text"), like: likeCount, id: item.id, isLiked: isLiked});
             return accum;
         }, []);
         setTopicAllAnswer(ans);
@@ -141,7 +144,7 @@ const QuestionAnswersPage = () => {
                                                 <i className="fas fa-heart fa-lg"/>
                                             </div>
 
-                                            <div className="like-count">{item.like}</div>
+                                            {/*<div className="like-count">{item.like}</div>*/}
                                         </div>
                                     </Card.Body>
                                 </Card>

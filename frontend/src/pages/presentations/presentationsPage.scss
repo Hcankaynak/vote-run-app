@@ -1,40 +1,62 @@
-.questions-page {
+.presentation-page {
   display: flex;
   flex-direction: column;
   width: 100%;
   padding-top: 2%;
   min-height: 87.4vh;
+  height: 100%;
 
-  .questions-page-header {
+
+  .answers-page-header {
     display: flex;
-    height: 15%;
-    padding-left: 5%;
+    width: 100%;
+    justify-content: space-around;
+    align-items: center;
 
-    .return-button {
+    .answers-page-header-content {
+      width: 90%;
       display: flex;
-      align-items: center;
-    }
 
-    .question-header {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: larger;
-      font-weight: bold;
-      width: 100%;
-      padding-left: 2%;
-      padding-right: 2%;
+      .prev {
+        display: flex;
+        flex: 1;
+      }
+
+      .questions {
+        display: flex;
+        font-weight: bold;
+        font-size: larger;
+        align-items: center;
+        justify-items: center;
+      }
+
+      .next {
+        flex: 1;
+        display: flex;
+        flex-direction: row-reverse;
+      }
     }
+  }
+
+  .presentation-header {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 4%;
+    font-size: 2.5rem;
+    font-weight: bold;
   }
 
   @media only screen and (max-width: 576px) {
     .questions-page-content {
       grid-template-columns: 1fr !important;
       grid-gap: unset !important;
+      margin-bottom: 26rem !important;
 
       .answer-card {
         margin-bottom: 5% !important;
       }
+
     }
 
     .no-records {
@@ -83,10 +105,6 @@
         .liked {
           color: red;
         }
-
-        .like-icon:active {
-          transform: translateY(4px);
-        }
       }
     }
   }
@@ -101,5 +119,7 @@
   .spinner-shell {
     display: flex;
     justify-content: center;
+    margin-bottom: 50px;
   }
+
 }

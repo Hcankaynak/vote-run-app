@@ -38,7 +38,7 @@ const HomePage = (props: IHomePage) => {
     const generatePath = (presentationId) => {
         const hostName = window.location.origin;
         console.log(hostName + "/" + "answers" + "/" + presentationId);
-        return hostName + "/" + "answers" + "/" + presentationId;
+        return hostName + "/" + "presentations" + "/" + presentationId;
     };
 
     const renderPresentations = () => {
@@ -54,7 +54,7 @@ const HomePage = (props: IHomePage) => {
         return (
             <div className="home-page-presentations">
                 {
-                    presentations.filter((value) => value.data()?.presentationName.includes(searchedText)).map((item) => {
+                    presentations.filter((value) => value.data()?.presentationName.toLocaleLowerCase().includes(searchedText.toLocaleLowerCase())).map((item) => {
                         return (
                             <Card key={item.id} className="presentation-card">
                                 <Card.Body>

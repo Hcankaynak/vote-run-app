@@ -18,7 +18,7 @@ Backend ws ends:
 
 Todos:
 
-[ ] write separate pages for question answers (user, no interaction)
+[X] write separate pages for question answers (user, no interaction)
 <br>
 [ ] check responsive design for all pages.
 <br>
