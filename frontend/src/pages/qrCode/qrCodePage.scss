@@ -7,6 +7,16 @@
   flex-direction: column;
   min-height: 87.4vh;
 
+  .qr-code-buttons {
+    .presentation-button {
+      margin-right: 10px;
+    }
+
+    .fa-copy {
+      font-size: 15px;
+    }
+  }
+
   .qr-code-generator {
     margin-bottom: 2%;
   }

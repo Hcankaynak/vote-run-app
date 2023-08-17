@@ -4,6 +4,7 @@
   padding: 30px;
   min-height: 87.4vh;
 
+
   .presentation-name {
     width: 50%;
     display: flex;
@@ -81,6 +82,19 @@
     .btn-success:hover:disabled {
       // TODO: fix this.
       cursor: not-allowed;
+    }
+  }
+
+
+  @media only screen and (max-width: 576px) {
+    .presentation-name {
+      width: 100%;
+    }
+    .btn-continue-shell {
+      margin-top: 10%;
+      .btn-success {
+        width: 50%;
+      }
     }
   }
 }

@@ -41,6 +41,10 @@ const HomePage = (props: IHomePage) => {
         return hostName + "/" + "presentations" + "/" + presentationId;
     };
 
+    const downloadAsCSV = () => {
+        console.log("csv")
+    }
+
     const renderPresentations = () => {
         if (isLoading) {
             return (
@@ -69,6 +73,7 @@ const HomePage = (props: IHomePage) => {
                                         })
                                     }}>Go To QR</Button>
                                     <Button href={generatePath(item.id)}>Go To Presentation</Button>
+                                    <Button onClick={() => downloadAsCSV()}> <i className="fas fa-download"/> </Button>
                                     <div className="card-bottom">
                                         {"Questions: " + item?.data()?.questions.length}
                                         <div className="like-count">{item.like}</div>

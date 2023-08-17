@@ -23,10 +23,11 @@
     .home-page-presentations {
       display: grid;
       grid-template-columns: auto auto;
-      grid-gap: 3%;
+      //grid-gap: 3%;
       padding: 2% 5% 5% 5%;
 
       .presentation-card {
+        margin: 3%;
         .card-text {
           font-size: 30px;
           font-weight: bold;
@@ -41,6 +42,29 @@
             height: 20px;
             align-items: center;
             margin-right: 10px;
+          }
+        }
+
+        .fa-download {
+          font-size: 15px;
+        }
+      }
+    }
+
+    @media only screen and (max-width: 576px) {
+      .home-page-presentations {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-gap: unset !important;
+
+        .presentation-card {
+          margin-bottom: 5% !important;
+          .card-body{
+            display: flex;
+            flex-direction: column;
+            .btn {
+              margin-left: unset;
+            }
           }
         }
       }

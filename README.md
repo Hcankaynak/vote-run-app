@@ -17,16 +17,9 @@ Backend ws ends:
 - "/api" mock data.
 
 Todos:
-
-[X] write separate pages for question answers (user, no interaction)
+[ ] CSV export
 <br>
-[ ] check responsive design for all pages.
-<br>
-[X] only liked once feature.
-<br>
-[ ] Excel export
-<br>
-[ ] Send mail
+[ ] Send mail (Need backend for this.)
 <br>
 [ ] Fix transaction structure.
 <br>
@@ -34,3 +27,12 @@ Todos:
 <br>
 [ ] Presentation order
 <br>
+[ ] login fail popup
+<br>
+[X] homepage responsive design, create presentation page
+<br>
+[X] qr go to change.
+<br>
+[X] qr add copy
+<br>
+[ ] add delete presentation.
