@@ -17,7 +17,7 @@ Backend ws ends:
 - "/api" mock data.
 
 Todos:
-[ ] CSV export
+[X] CSV export
 <br>
 [ ] Send mail (Need backend for this.)
 <br>
@@ -36,3 +36,5 @@ Todos:
 [X] qr add copy
 <br>
 [ ] add delete presentation.
+<br>
+[ ] create pipeline for deploy.
