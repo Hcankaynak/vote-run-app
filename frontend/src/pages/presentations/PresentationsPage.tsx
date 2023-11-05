@@ -164,7 +164,7 @@ const PresentationsPage = () => {
                         })
                     }
                 </div> : <div className="no-records">
-                    There is no records to show
+                    There are no records to display
                 </div>
             }
             {
