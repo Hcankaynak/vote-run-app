@@ -7,6 +7,9 @@ import {ANSWERS_COLLECTION_NAME, PRESENTATIONS_COLLECTION_NAME} from "../present
 import {minZeroDecrease} from "../../Utils/Math";
 import {MdNavigateBefore, MdNavigateNext} from "react-icons/md";
 import "./presentationsPage.scss";
+import {usePopUp} from "../../components/PopUp/usePopUp";
+import {PopUp} from "../../components/PopUp/PopUp";
+import QRCode from "react-qr-code";
 
 interface IAnswer {
     text: string;
@@ -22,6 +25,7 @@ const PresentationsPage = () => {
     const [isLoadingAnswers, setLoadingAnswers] = React.useState(true);
     const [isLoadingHeader, setLoadingHeader] = React.useState(true);
     const {presentationId} = useParams();
+    const [isVisible, closeCallback, openPopUp] = usePopUp();
 
 
     React.useEffect(() => {
@@ -53,6 +57,12 @@ const PresentationsPage = () => {
         return () => unsub();
     }, [selectedQuestion]);
 
+    const qrCodeData = React.useMemo(() => {
+        const hostName = window.location.origin;
+        console.log(hostName + "/" + "answers" + "/" + presentationId);
+        return hostName + "/" + "answers" + "/" + presentationId;
+    }, [presentationId]);
+
     const convertDBObjectToReactObject = (docs) => {
         const ans = docs.reduce((accum, item) => {
             let isLiked = false;
@@ -74,6 +84,13 @@ const PresentationsPage = () => {
         return minZeroDecrease(likeCount);
     }
 
+    const qrCodeButton = (): JSX.Element => {
+        return <div className="qr-code-button">
+            <Button className="qr-button" onClick={() => openPopUp()}>
+                <i className="fas fa-qrcode"></i>
+            </Button>
+        </div>
+    }
     return (
         <div className="presentation-page">
             {
@@ -150,6 +167,11 @@ const PresentationsPage = () => {
                     There is no records to show
                 </div>
             }
+            {
+                qrCodeButton()
+            }
+            <PopUp isVisible={isVisible} closeCallBack={closeCallback} body={<QRCode value={qrCodeData}/>
+            }></PopUp>
         </div>
     )
 }

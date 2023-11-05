@@ -6,6 +6,23 @@
   min-height: 87.4vh;
   height: 100%;
 
+  .qr-code-button {
+    position: fixed;
+    right: 25px;
+    bottom: 25px;
+
+    .qr-button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 48px;
+      height: 48px;
+
+      .fa-qrcode {
+        font-size: 2rem;
+      }
+    }
+  }
 
   .answers-page-header {
     display: flex;
